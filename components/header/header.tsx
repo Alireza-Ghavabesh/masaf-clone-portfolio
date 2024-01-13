@@ -31,12 +31,14 @@ function Header() {
       <div>
         <nav className="lg:hidden">
           <div className="flex justify-between p-2">
-            <button className="border font-IranYekanWebBold flex items-center gap-1 px-1 rounded-lg">
-              <Link href={"/auth"}>
-                <div>ورود و ثبت نام</div>
-              </Link>
+            <Link
+              className="border font-IranYekanWebBold flex items-center gap-1 px-1 rounded-lg"
+              href={"/auth"}
+            >
+              <div>ورود و ثبت نام</div>
               <FontAwesomeIcon icon={faSignInAlt} />
-            </button>
+            </Link>
+
             <Link href={"/"}>
               <Image src={MasafLogo} alt="" width={137} height={47} />
             </Link>
@@ -67,34 +69,62 @@ function Header() {
             </li>
             <hr className="my-3" />
             <div className="flex flex-col gap-8">
-              <li className="flex gap-2">
-                <Image src={montakhab} alt="" width={19} height={20} />
-                <Link href={"#"}>منتخب مطالب واحد ها</Link>
-              </li>
-              <li className="flex gap-2">
+              <Link
+                onClick={toggleHidden}
+                href={"/vahedha"}
+                className="flex gap-2"
+              >
+                <Image src={vahedha} alt="" width={19} height={20} />
+                <li>منتخب مطالب واحد ها</li>
+              </Link>
+              <Link
+                onClick={toggleHidden}
+                href={"/sokhanraniha"}
+                className="flex gap-2"
+              >
                 <Image src={sokhanrani} alt="" width={19} height={20} />
-                <Link href={"/units?portalId=12"}>سخنرانی ها</Link>
-              </li>
-              <li className="flex gap-2">
+                <li>سخنرانی ها</li>
+              </Link>
+              <Link
+                onClick={toggleHidden}
+                href={"/clipha"}
+                className="flex gap-2"
+              >
                 <Image src={clipha} alt="" width={19} height={20} />
-                <Link href={"#"}>کلیپ ها</Link>
-              </li>
-              <li className="flex gap-2">
+                <li>کلیپ ها</li>
+              </Link>
+              <Link
+                onClick={toggleHidden}
+                href={"/marasemha"}
+                className="flex gap-2"
+              >
                 <Image src={galleryMarasem} alt="" width={19} height={20} />
-                <Link href={"#"}>گالری مراسم</Link>
-              </li>
-              <li className="flex gap-2">
+                <li>گالری مراسم</li>
+              </Link>
+              <Link
+                onClick={toggleHidden}
+                href={"/twittha"}
+                className="flex gap-2"
+              >
                 <Image src={twiitha} alt="" width={19} height={20} />
-                <Link href={"#"}>توییت ها</Link>
-              </li>
-              <li className="flex gap-2">
+                <li>توییت ها</li>
+              </Link>
+              <Link
+                onClick={toggleHidden}
+                href={"/etelaresani"}
+                className="flex gap-2"
+              >
                 <Image src={etelaResani} alt="" width={19} height={20} />
-                <Link href={"#"}>اطلاع رسانی</Link>
-              </li>
-              <li className="flex gap-2">
+                <li>اطلاع رسانی</li>
+              </Link>
+              <Link
+                onClick={toggleHidden}
+                href={"/darbarema"}
+                className="flex gap-2"
+              >
                 <Image src={darbarema} alt="" width={19} height={20} />
-                <Link href={"#"}>درباره ما و تماس با ما</Link>
-              </li>
+                <li>درباره ما و تماس با ما</li>
+              </Link>
             </div>
             <hr className="my-3" />
             <div className="flex gap-2 font-bold">
@@ -106,13 +136,14 @@ function Header() {
         </nav>
         <nav className="hidden lg:flex flex-col gap-2 container mx-auto">
           <div className="flex gap-2 w-full justify-between p-4">
-            <button className="border font-IranYekanWebBold h-fit my-auto px-3 flex items-center gap-1 py-2 rounded-lg">
-              <Link href={"/auth"}>
-                <div className="whitespace-nowrap">ورود و ثبت نام</div>
-              </Link>
-
+            <Link
+              className="border font-IranYekanWebBold h-fit my-auto px-3 flex items-center gap-1 py-2 rounded-lg"
+              href={"/auth"}
+            >
+              <div className="whitespace-nowrap">ورود و ثبت نام</div>
               <FontAwesomeIcon icon={faSignInAlt} />
-            </button>
+            </Link>
+
             <Link href={"/"}>
               <div className="flex gap-2">
                 <Search />
@@ -122,33 +153,61 @@ function Header() {
           </div>
 
           <ul className="flex gap-2 justify-end pr-4 w-full container pb-4">
-            <div className="flex gap-5 whitespace-nowrap">
-              <li>
-                <Link href={"#"}>منتخب مطالب واحد ها</Link>
-              </li>
-              <li>
-                <Link href={"#"}>سخنرانی ها</Link>
-              </li>
-              <li>
-                <Link href={"#"}>کلیپ ها</Link>
-              </li>
-              <li>
-                <Link href={"#"}>گالری مراسم</Link>
-              </li>
-              <li>
-                <Link href={"#"}>توییت ها</Link>
-              </li>
-              <li>
-                <Link href={"#"}>اطلاع رسانی</Link>
-              </li>
-              <li>
-                <Link href={"#"}>درباره ما و تماس با ما</Link>
-              </li>
+            <div className="flex gap-4 whitespace-nowrap">
+              <Link
+                href={"/darbarema"}
+                className="flex gap-2 items-center cursor-pointer hover:opacity-50"
+              >
+                <li>درباره ما و تماس با ما</li>
+                <Image src={darbarema} alt="" width={19} height={20} />
+              </Link>
+              <Link
+                href={"/etelaresani"}
+                className="flex gap-2 items-center cursor-pointer hover:opacity-50"
+              >
+                <li>اطلاع رسانی</li>
+                <Image src={etelaResani} alt="" width={19} height={20} />
+              </Link>
+              <Link
+                href={"/twittha"}
+                className="flex gap-2 items-center cursor-pointer hover:opacity-50"
+              >
+                <li>توییت ها</li>
+                <Image src={twiitha} alt="" width={19} height={20} />
+              </Link>
+              <Link
+                href={"/marasemha"}
+                className="flex gap-2 items-center cursor-pointer hover:opacity-50"
+              >
+                <li>گالری مراسم</li>
+                <Image src={galleryMarasem} alt="" width={19} height={20} />
+              </Link>
+              <Link
+                href={"/etelaresani"}
+                className="flex gap-2 items-center cursor-pointer hover:opacity-50"
+              >
+                <li>کلیپ ها</li>
+                <Image src={clipha} alt="" width={19} height={20} />
+              </Link>
+              <Link
+                href={"/sokhanraniha"}
+                className="flex gap-2 items-center cursor-pointer hover:opacity-50"
+              >
+                <li>سخنرانی ها</li>
+                <Image src={sokhanrani} alt="" width={19} height={20} />
+              </Link>
+              <Link
+                href={"/vahedha"}
+                className="flex gap-2 items-center cursor-pointer hover:opacity-50"
+              >
+                <li>منتخب مطالب واحد ها</li>
+                <Image src={vahedha} alt="" width={19} height={20} />
+              </Link>
             </div>
             <div className="opacity-35">|</div>
-            <button className="whitespace-nowrap flex gap-2">
-              <Image src={vahedha} alt="" width={19} height={20} />
+            <button className="whitespace-nowrap flex gap-2 items-center cursor-pointer">
               <div>واحد ها</div>
+              <Image src={vahedha} alt="" width={19} height={20} />
             </button>
           </ul>
         </nav>
