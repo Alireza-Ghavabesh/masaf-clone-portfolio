@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "IRANSansWeb";
+  src: url("../public/fonts/IRANSansWeb.woff2");
+}
+
+@font-face {
+  font-family: "IranYekanWebBold";
+  src: url("../public/fonts/IranYekanWeb-Bold.woff2");
+}
+
+.isLogin {
+  border: none;
+  background: transparent;
+  border-bottom: 10px solid yellowgreen;
+  transition: ease-in-out 0.6s;
+}
+/* 
+.isLogin::after {
+  position: relative;
+  top: 10;
+  border-bottom: 3px solid yellowgreen;
+} */
+
+.isRegister {
+  border: none;
+  border-bottom: 10px solid yellowgreen;
+  background: transparent;
+  transition: ease-in-out 0.6s;
+}
