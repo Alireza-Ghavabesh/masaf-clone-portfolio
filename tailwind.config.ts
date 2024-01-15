@@ -17,6 +17,9 @@ const config: Config = {
         IRANSansWeb: ["IRANSansWeb"],
         IranYekanWebBold: ["IranYekanWebBold"],
       },
+      colors: {
+        zomorod: "#7CA8B0",
+      },
     },
   },
   plugins: [],

@@ -183,7 +183,7 @@ function Header() {
                 <Image src={galleryMarasem} alt="" width={19} height={20} />
               </Link>
               <Link
-                href={"/etelaresani"}
+                href={"/clipha"}
                 className="flex gap-2 items-center cursor-pointer hover:opacity-50"
               >
                 <li>کلیپ ها</li>

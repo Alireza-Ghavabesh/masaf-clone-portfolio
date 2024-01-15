@@ -1,12 +1,15 @@
 import { faSearch, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import filterIcon from "@/public/svgs/main/filter.svg";
+import Image from "next/image";
+import GridSingleVideo from "@/components/singleVideo/gridSingleVideo";
 
 function page() {
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-6">
       <div className="flex lg:gap-2 lg:flex-row-reverse flex-col">
-        <div className="mt-10 font-IranYekanWebBold whitespace-nowrap w-full lg:w-fit">
+        <div className="mt-10 font-IranYekanWebBold whitespace-nowrap w-full lg:w-[30%]">
           <div className="border rounded-t-lg">
             <div dir="rtl" className="w-full bg-white rounded-t-lg p-4">
               <div className="text-lg">دسته بندی</div>
@@ -126,7 +129,101 @@ function page() {
             </div>
           </div>
         </div>
-        <div className="mt-10  border w-full">ss</div>
+        <div className="mt-10 w-full">
+          <div
+            dir="rtl"
+            className="p-4 flex justify-start font-IRANSansWeb gap-4 whitespace-nowrap"
+          >
+            <div className="flex gap-2 items-center">
+              <Image src={filterIcon} alt="" width={19} height={20} />
+              <div>مرتب سازی</div>
+              <span className="h-8 mx-4 border border-gray-200"></span>
+            </div>
+            <div className="flex gap-3 flex-wrap justify-around items-center">
+              <div className="cursor-pointer hover:text-zomorod">
+                پربازدید ترین
+              </div>
+              <div className="cursor-pointer hover:text-zomorod">جدید ترین</div>
+              <div className="cursor-pointer hover:text-zomorod">
+                قدیمی ترین
+              </div>
+            </div>
+          </div>
+          <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+            <GridSingleVideo
+              src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+              href="/content/10"
+              desc={
+                "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
+              }
+              date={"1402/08/03"}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

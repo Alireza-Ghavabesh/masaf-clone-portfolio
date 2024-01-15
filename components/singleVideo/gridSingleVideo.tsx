@@ -21,10 +21,9 @@ type props = {
 function SkeletonLoader() {
   return (
     <>
-      <div className="flex flex-col gap-1 animate-pulse bg-gray-400 rounded-lg p-1">
-        <div className="animate-pulse bg-gray-200 h-32 rounded-lg"></div>
-
-        <div className="relative animate-pulse bg-gray-200 h-44 rounded-lg items-start p-2 flex flex-col gap-1">
+      <div className="flex flex-col gap-1 animate-pulse bg-gray-400 p-1">
+        <div className="animate-pulse bg-gray-200 h-32 "></div>
+        <div className="relative animate-pulse bg-gray-200 h-44 items-start p-2 flex flex-col gap-1">
           <div className="w-full flex gap-1 flex-row-reverse">
             <div className="w-[10%]">
               <div className="animate-pulse bg-gray-500 w-full h-9 rounded-lg"></div>
@@ -51,7 +50,7 @@ function SkeletonLoader() {
   );
 }
 
-function SingleVideo(props: props) {
+function GridSingleVideo(props: props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -65,7 +64,7 @@ function SingleVideo(props: props) {
   return (
     <Link
       href={props.href}
-      className="flex flex-col gap-3 bg-[#F8F8F6] p-2 rounded-lg border"
+      className="flex flex-col p-4 bg-[#F8F8F6] border gap-2"
     >
       <div className="w-full h-48 relative cursor-pointer">
         <Image
@@ -73,7 +72,7 @@ function SingleVideo(props: props) {
           alt="سخنرانی استاد رائفی پور - مراسم دعای ندبه جلسه 35"
           width={1000}
           height={1000}
-          className="object-cover h-full w-full rounded-lg"
+          className="object-cover h-full w-full"
         />
         <button className="bg-black bg-opacity-50 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-full text-white text-xs p-3 w-10 h-10  ">
           <FontAwesomeIcon icon={faPlay} size="xl" />
@@ -96,4 +95,4 @@ function SingleVideo(props: props) {
   );
 }
 
-export default SingleVideo;
+export default GridSingleVideo;
