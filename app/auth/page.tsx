@@ -38,7 +38,7 @@ function page() {
             type="number"
             placeholder="شماره همراه خود را وارد کنید"
           />
-          <button className="bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none active:bg-green-800">
+          <button className="bg-[#1bd5f6] text-white font-bold py-2 px-4 rounded focus:outline-none active:bg-green-800">
             ارسال کد
           </button>
         </div>
@@ -57,7 +57,7 @@ function page() {
             type="number"
             placeholder="شماره همراه خود را وارد کنید"
           />
-          <button className="bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none active:bg-green-800">
+          <button className="bg-[#1bd5f6] text-white font-bold py-2 px-4 rounded focus:outline-none active:bg-green-800">
             ثبت نام و ارسال کد تایید
           </button>
         </div>
