@@ -20,6 +20,7 @@
     "jalaali-js": "^1.2.6",
     "next": "14.0.4",
     "react": "^18",
+    "react-audio-player": "^0.17.0",
     "react-dom": "^18",
     "react-loading-skeleton": "^3.3.1",
     "swiper": "^11.0.5"

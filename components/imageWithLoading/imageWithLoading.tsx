@@ -17,7 +17,7 @@ async function ImageWithLoading({
   className?: string;
 }) {
   if (loadingTime) {
-    await delaySimulator(loadingTime);
+    // await delaySimulator(loadingTime);
   }
   return (
     <>

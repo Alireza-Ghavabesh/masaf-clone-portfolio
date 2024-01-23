@@ -56,7 +56,8 @@ function SingleSocialVideo(props: props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    delaySimulator(2000).then(() => setLoading(false));
+    // delaySimulator(2000).then(() => setLoading(false));
+    setLoading(false);
   }, []);
 
   if (loading) {

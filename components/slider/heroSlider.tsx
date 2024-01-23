@@ -8,7 +8,7 @@ import "swiper/css";
 import { delaySimulator } from "@/utils/utils";
 
 async function HeroSlider() {
-  await delaySimulator(5000);
+  // await delaySimulator(5000);
   return (
     <div className="container mx-auto mt-4">
       <Swiper

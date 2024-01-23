@@ -19,6 +19,7 @@ const config: Config = {
       },
       colors: {
         zomorod: "#7CA8B0",
+        zzomorod: "rgb(57 152 172/var(--tw-bg-opacity))",
       },
     },
   },

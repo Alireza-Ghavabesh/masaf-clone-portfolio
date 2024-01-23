@@ -5,7 +5,7 @@ import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SocialSlider from "@/components/slider/socialSlider";
 import ContentForYou from "@/components/contentForYou/contentForYou";
-import Skeleton from "./loading";
+import Skeleton from "@/components/skeletons/homePageLoading";
 import { Suspense } from "react";
 import ImageWithLoading from "@/components/imageWithLoading/imageWithLoading";
 import {
