@@ -33,7 +33,7 @@ function Header() {
           <div className="flex justify-between p-2">
             <Link
               className="border font-IranYekanWebBold flex items-center gap-1 px-1 rounded-lg"
-              href={"/auth"}
+              href={"/auth/login"}
             >
               <div>ورود و ثبت نام</div>
               <FontAwesomeIcon icon={faSignInAlt} />
@@ -138,7 +138,7 @@ function Header() {
           <div className="flex gap-2 w-full justify-between p-4">
             <Link
               className="border font-IranYekanWebBold h-fit my-auto px-3 flex items-center gap-1 py-2 rounded-lg"
-              href={"/auth"}
+              href={"/auth/login"}
             >
               <div className="whitespace-nowrap">ورود و ثبت نام</div>
               <FontAwesomeIcon icon={faSignInAlt} />

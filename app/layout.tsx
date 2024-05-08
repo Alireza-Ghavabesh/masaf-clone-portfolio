@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-[#F8F8F6] flex flex-col min-h-screen">
         <Header />
-        <div className="flex-grow">{children}</div>
+        <div className="flex-grow py-4">{children}</div>
         <Footer />
       </body>
     </html>
