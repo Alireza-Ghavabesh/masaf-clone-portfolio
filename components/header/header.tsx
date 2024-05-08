@@ -137,7 +137,7 @@ function Header() {
         <nav className="hidden lg:flex flex-col gap-2 container mx-auto">
           <div className="flex gap-2 w-full justify-between p-4">
             <Link
-              className="border font-IranYekanWebBold h-fit my-auto px-3 flex items-center gap-1 py-2 rounded-lg"
+              className="hover:border-2 border font-IranYekanWebBold h-fit my-auto px-3 flex items-center gap-1 py-2 rounded-lg"
               href={"/auth/login"}
             >
               <div className="whitespace-nowrap">ورود و ثبت نام</div>
