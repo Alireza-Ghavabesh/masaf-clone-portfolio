@@ -144,12 +144,10 @@ function Header() {
               <FontAwesomeIcon icon={faSignInAlt} />
             </Link>
 
-            <Link href={"/"}>
-              <div className="flex gap-2">
+            <div className="flex gap-2">
                 <Search />
                 <Image src={MasafLogo} alt="" width={137} height={47} />
               </div>
-            </Link>
           </div>
 
           <ul className="flex gap-2 justify-end pr-4 w-full container pb-4">

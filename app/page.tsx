@@ -9,7 +9,7 @@ import Skeleton from "@/components/skeletons/homePageLoading";
 import { Suspense } from "react";
 import ImageWithLoading from "@/components/imageWithLoading/imageWithLoading";
 import {
-  MiddleSkeleton,
+  // MiddleSkeleton,
   SocialMiddleSkeleton,
 } from "@/components/imageWithLoading/skeleton";
 import { ThreeSkeleton } from "@/components/skeletons/threeSkeleton";
