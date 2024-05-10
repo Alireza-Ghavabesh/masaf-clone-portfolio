@@ -15,7 +15,7 @@ export default function LoginPage() {
           <Image src={dashIcon} alt="" />
         </div>
         <div className="flex justify-center">
-          جهت ورود به سایت مصاف شماره همراه / ایمیل خود را وارد کنید
+          جهت ورود به سایت مصاف شماره همراه خود را وارد کنید
         </div>
       </div>
       <div className="flex justify-center">
