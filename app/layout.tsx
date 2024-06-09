@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Header from "@/components/header/header";
-import Footer from "@/components/footer/footer";
+import Header from "../components/header/header";
+import Footer from "../components/footer/footer";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
@@ -9,9 +9,6 @@ config.autoAddCss = false;
 export const metadata: Metadata = {
   title: "موسسه مصاف ایرانیان",
   description: "",
-  icons: {
-    icon: "./icon.png", // /public path
-  },
 };
 
 export default function RootLayout({
