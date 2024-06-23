@@ -52,7 +52,15 @@ function UploadVideo() {
 
   const onSubmit = (data: FormFields) => {
     // Handle form submission
-    console.log(data);
+
+    const dataForSend = {
+      title: data.title,
+      content: data.content,
+      category: formData.category,
+      videos: formData.videos,
+      images: formData.images,
+    };
+    console.log(dataForSend);
   };
 
   const handleAddNewVideoInput = () => {
@@ -80,7 +88,6 @@ function UploadVideo() {
       };
     });
   };
-
 
   const removeChooseSoundByIndex = (videoIndex: number, audioIndex: number) => {
     setFormData((prevData) => {
@@ -132,10 +139,20 @@ function UploadVideo() {
         className="border-2 outline-none px-2 rounded-lg"
         {...register("content")}
       />
-      <select name="" id="">
+      <select
+        name=""
+        id=""
+        onChange={(e) => {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            category: e.target.value,
+          }));
+          console.log(e.target.value);
+        }}
+      >
         <option value="">انتخاب دسته</option>
         {categorys.map((category) => (
-          <option value="">{category}</option>
+          <option value={category}>{category}</option>
         ))}
       </select>
 
@@ -177,10 +194,19 @@ function UploadVideo() {
                 type="file"
                 onInput={(e: any) => {
                   const file = e.target.files[0];
-                  setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    videos: [...prevFormData.videos, {file: file, audios: []}]
-                  }))
+                  setFormData((prevData) => {
+                    const updatedVideos = [...prevData.videos];
+
+                    updatedVideos[videoIndex] = {
+                      file: file,
+                      audios: [],
+                    };
+
+                    return {
+                      ...prevData,
+                      videos: updatedVideos,
+                    };
+                  });
                 }}
                 className="absolute opacity-0 w-full top-0 h-full"
               />
@@ -216,19 +242,15 @@ function UploadVideo() {
                       type="file"
                       className="absolute opacity-0 w-full top-0 h-full"
                       onInput={(e: any) => {
-                        const file = e.target.files[0];
-                        setFormData((prevData) => {
-                          const updatedVideos = [...prevData.videos];
-                          updatedVideos[videoIndex] = {
-                            ...updatedVideos[videoIndex],
-                            audios: [...updatedVideos[videoIndex].audios, { file: file }],
-                          };
-                    
-                          return {
-                            ...prevData,
-                            videos: updatedVideos,
-                          };
-                        });
+                        const updatedVideos = [...formData.videos];
+                        const specificVideo = updatedVideos[videoIndex];
+                        const audioFile = e.target.files[0];
+                        specificVideo.audios[audioIndex] = { file: audioFile };
+                        // Update the state with the modified videos array
+                        setFormData((prevFormData) => ({
+                          ...prevFormData,
+                          videos: updatedVideos,
+                        }));
                       }}
                     />
                   </div>
@@ -263,14 +285,21 @@ function UploadVideo() {
           <div className="cursor-pointer p-2 justify-between rounded-lg relative hover:bg-lime-200">
             <div className="">انتخاب گالری مراسم (اختیاری)</div>
             <input
+            multiple
               type="file"
               className="absolute opacity-0 w-full top-0 h-full"
+              onInput={(e: any) => {
+                const files = e.target.files;
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  images: files
+                }))
+              }}
             />
           </div>
         </div>
       </div>
       <input className="border h-12 text-2xl" type="submit" value="ثبت" />
-      
     </form>
   );
 }
