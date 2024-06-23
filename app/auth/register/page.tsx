@@ -3,13 +3,132 @@ import { useState } from "react";
 import masafLogo from "../../../public/svgs/auth/masafLogo.svg";
 import dashIcon from "../../../public/svgs/auth/dash.svg";
 import Image from "next/image";
+import { signIn, signOut } from "next-auth/react";
+import { validateEmail } from "./../../../utils/utils";
+import { Bounce, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { passwordStrength } from 'check-password-strength';
+
+
 
 export default function RegisterPage() {
-  const [phonenumber, setPhonenumber] = useState("");
-  const sendCode = () => {
-    // call kavenegar OTP and wait for user to give us its code
-    console.log(phonenumber);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passStrength, setPassStrength] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
+  
+
+  function formIsOk(
+    password: string,
+    confirmPassword: string,
+    passwordStrength: string
+  ) {
+    const okPasswordStrengthList = ["متوسط", "قوی"];
+    const passwordStatus = password !== "";
+    const confirmPasswordStatus = confirmPassword !== "";
+    const firstNameStatus = firstName !== "";
+    const lastNameStatus = lastName !== "";
+    const emailStatus = validateEmail(email);
+    const passAndConfirmIsSame = password === confirmPassword;
+    const passIsStrength = okPasswordStrengthList.includes(passwordStrength);
+    const allStatusOk =
+      passwordStatus &&
+      confirmPasswordStatus &&
+      firstNameStatus &&
+      lastNameStatus &&
+      emailStatus &&
+      passIsStrength &&
+      passAndConfirmIsSame;
+    // if (allStatusOk && passAndConfirmIsSame && passIsStrength) {
+    //     return true;
+    // }
+    return {
+      allStatusOk,
+      passwordStatus,
+      confirmPasswordStatus,
+      firstNameStatus,
+      lastNameStatus,
+      emailStatus,
+      passAndConfirmIsSame,
+      passIsStrength,
+    };
+  }
+
+  const submitForm = async (e: any) => {
+    e.preventDefault();
+    const formStatus = formIsOk(password, confirmPassword, passStrength);
+    if (formStatus.allStatusOk) {
+      setIsRegistering(() => true);
+      console.log({
+        loginMethod: "userpass",
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ADDRESS}/api/auth/register`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            loginMethod: "userpass",
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+            isAdmin: false,
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const registerResult = await res.json();
+      if (registerResult.status === "OK") {
+        toast.success("لینک فعال سازی به ایمیل شما فرستاده شد", {
+          position: "top-center",
+          autoClose: 20000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+          style: {
+            fontFamily: "IranYekanWebBold",
+            textAlign: "right",
+          },
+        });
+      } else {
+        toast.error("با این ایمیل قبلا ثبت نام کرده اید", {
+          position: "top-right",
+          autoClose: 20000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+          style: {
+            fontFamily: "IranYekanWebBold",
+            textAlign: "right",
+          },
+        });
+      }
+      console.log("all is ok");
+      console.log(registerResult);
+      setIsRegistering(() => false);
+      // router.push('/');
+      // console.log(user);
+      // console.log({firstName, lastName, email, password})
+    } else {
+      console.log(formStatus);
+    }
   };
+
   return (
     <div className="flex flex-col px-3 gap-2 py-10">
       <div className="flex flex-col gap-4 w-full">
@@ -21,23 +140,88 @@ export default function RegisterPage() {
           <Image src={dashIcon} alt="" />
         </div>
         <div className="flex justify-center text-nowrap">
-          جهت ثبت نام در سایت مصاف شماره همراه خود را وارد کنید
+          جهت ثبت نام در سایت مصاف شماره همراه یا ایمیل خود را وارد کنید
         </div>
       </div>
       <div className="flex justify-center">
         <div className="flex flex-col w-96 gap-2">
-          <input
-            className="rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none mt-2 border"
-            dir="ltr"
-            type="text"
-            onInput={(event: any) => setPhonenumber(() => event.target.value)}
-          />
-          <button
-            onClick={sendCode}
-            className="bg-[#1bd5f6] hover:bg-zzomorod text-white font-bold py-2 px-4 rounded focus:outline-none active:bg-green-800"
-          >
-            دریافت کد تایید
-          </button>
+          <form className="flex flex-col gap-2" onSubmit={submitForm}>
+            <input
+              disabled={isRegistering}
+              onChange={(e) => setFirstName(() => e.target.value)}
+              id="Email"
+              name="firstname"
+              type="text"
+              placeholder="نام را وارد کنید"
+              className="rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none mt-2 border text-center"
+            />
+            <input
+              disabled={isRegistering}
+              onChange={(e) => setLastName(() => e.target.value)}
+              id="Email"
+              name="lastname"
+              type="text"
+              placeholder="نام خانوادگی را وارد کنید"
+              className="rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none mt-2 border text-center"
+            />
+            <input
+              disabled={isRegistering}
+              onChange={(e) => setEmail(() => e.target.value)}
+              id="Email"
+              name="email"
+              type="email"
+              placeholder="ایمیل را وارد کنید"
+              className="rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none mt-2 border text-center"
+            />
+            <input
+              disabled={isRegistering}
+              onChange={async (e) => {
+                await (async () => {
+                  if (e.target.value !== "") {
+                    const r = passwordStrength(e.target.value).value;
+                    setPassword(() => e.target.value);
+                    if (r === "Too weak") {
+                      setPassStrength(() => "خیلی ضعیف");
+                    } else if (r === "Weak") {
+                      setPassStrength(() => "ضعیف");
+                    } else if (r === "Medium") {
+                      setPassStrength(() => "متوسط");
+                    } else if (r === "Strong") {
+                      setPassStrength(() => "قوی");
+                    }
+                  } else {
+                    setPassStrength(() => "");
+                  }
+                })().then(() => {
+                  console.log("after set password");
+                });
+              }}
+              id="password"
+              name="password"
+              type="password"
+              placeholder="رمز عبور خود را وارد کنید"
+              className="rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none mt-2 border text-center"
+            />
+            <input
+              disabled={isRegistering}
+              onChange={(e) => setConfirmPassword(() => e.target.value)}
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="رمز عبور خود را تکرار کنید"
+              className="rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none mt-2 border text-center"
+            />
+            <button
+              disabled={isRegistering}
+              type="submit"
+              className="bg-[#1bd5f6] hover:bg-zzomorod text-white font-bold py-2 px-4 rounded focus:outline-none active:bg-green-800"
+            >
+              {!isRegistering && "ثبت نام"}
+              {isRegistering &&
+                // <IconLoader className="inline-block shrink-0 animate-[spin_2s_linear_infinite] align-middle ltr:mr-2 rtl:ml-2" />
+                "درحال ثبت نام..."}
+            </button>
+          </form>
         </div>
       </div>
     </div>

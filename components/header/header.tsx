@@ -1,11 +1,15 @@
 "use client";
+
+import { useSession, signIn, signOut } from "next-auth/react";
 import React, { useState } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faSignInAlt,
+  faSignOut,
   faTimes,
+  faUserAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import Search from "../search/search";
@@ -20,6 +24,7 @@ import darbarema from "@/public/svgs/header/navbarIcons/darbarema.svg";
 import vahedha from "@/public/svgs/header/navbarIcons/vahedha.svg";
 
 function Header() {
+  const { data: session, status } = useSession();
   const [isHidden, setIsHidden] = useState(true);
 
   const toggleHidden = () => {
@@ -31,13 +36,30 @@ function Header() {
       <div>
         <nav className="lg:hidden">
           <div className="flex justify-between p-2">
-            <Link
-              className="border font-IranYekanWebBold flex items-center gap-1 px-1 rounded-lg"
-              href={"/auth/login"}
-            >
-              <div>ورود و ثبت نام</div>
-              <FontAwesomeIcon icon={faSignInAlt} />
-            </Link>
+            <div className="w-36 whitespace-nowrap h-14">
+              {status === "unauthenticated" && (
+                <Link
+                  className="w-full h-full border font-IranYekanWebBold flex items-center justify-between px-2 gap-1 rounded-lg"
+                  href={"/auth/login"}
+                >
+                  <div>ورود و ثبت نام</div>
+                  <FontAwesomeIcon icon={faSignInAlt} />
+                </Link>
+              )}
+
+              {status === "authenticated" && (
+                <button
+                  onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                  className="justify-center w-full h-full border font-IranYekanWebBold flex items-center gap-1 px-1 rounded-lg"
+                >
+                  <div>خروج</div> <FontAwesomeIcon icon={faSignOut} />
+                </button>
+              )}
+
+              {status === "loading" && (
+                <div className="bg-gray-400 rounded-2xl animate-pulse w-full h-full"></div>
+              )}
+            </div>
 
             <Link href={"/"}>
               <Image src={MasafLogo} alt="" width={137} height={47} />
@@ -135,19 +157,46 @@ function Header() {
           </ul>
         </nav>
         <nav className="hidden lg:flex flex-col gap-2 container mx-auto">
-          <div className="flex gap-2 w-full justify-between p-4">
-            <Link
-              className="hover:border-2 border font-IranYekanWebBold h-fit my-auto px-3 flex items-center gap-1 py-2 rounded-lg"
-              href={"/auth/login"}
-            >
-              <div className="whitespace-nowrap">ورود و ثبت نام</div>
-              <FontAwesomeIcon icon={faSignInAlt} />
-            </Link>
+          <div className="flex gap-2 w-full justify-between p-4 items-center">
+            {status === "unauthenticated" && (
+              <Link
+                className="hover:border-2 border font-IranYekanWebBold h-fit my-auto px-3 flex items-center gap-1 py-2 rounded-lg"
+                href={"/auth/login"}
+              >
+                <div className="whitespace-nowrap">ورود و ثبت نام</div>
+                <FontAwesomeIcon icon={faSignInAlt} />
+              </Link>
+            )}
+
+            <div className="flex gap-2 h-10">
+              {status === "authenticated" && (
+                <button
+                  onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                  className="w-24 whitespace-nowrap hover:border-2 border font-IranYekanWebBold h-full my-auto px-3 flex items-center gap-3 py-2 rounded-lg"
+                >
+                  <div>خروج</div> <FontAwesomeIcon icon={faSignOut} />
+                </button>
+              )}
+
+              {status === "authenticated" && (
+                <Link
+                  className="w-10 hover:border-2 border font-IranYekanWebBold h-full my-auto px-3 flex items-center gap-1 py-2 rounded-lg"
+                  href={"/dashboard/etelaatkarbari"}
+                >
+                  <FontAwesomeIcon icon={faUserAlt} />
+                </Link>
+              )}
+
+              {status === "loading" && (
+                // <button className="whitespace-nowrap hover:border-2 border font-IranYekanWebBold h-fit my-auto px-3 flex items-center gap-3 py-2 rounded-lg"></button>
+                <div className="bg-gray-400 rounded-lg animate-pulse w-36 h-10"></div>
+              )}
+            </div>
 
             <div className="flex gap-2">
-                <Search />
-                <Image src={MasafLogo} alt="" width={137} height={47} />
-              </div>
+              <Search />
+              <Image src={MasafLogo} alt="" width={137} height={47} />
+            </div>
           </div>
 
           <ul className="flex gap-2 justify-end pr-4 w-full container pb-4">
