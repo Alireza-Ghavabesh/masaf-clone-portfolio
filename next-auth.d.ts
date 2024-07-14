@@ -11,7 +11,7 @@ declare module 'next-auth' {
         firstName: string;
         lastName: string;
         email: string;
-        isAdmin: boolean,
+        isAdmin: boolean | string,
     }
 
 }

@@ -2,14 +2,15 @@
 import Link from "next/link";
 import React, { ReactNode, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type DashboardLayoutProps = {
   children: ReactNode;
 };
 
-
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: session, status } = useSession();
 
   return (
     <div className="bg-gray-100 font-IranYekanWebBold">
@@ -30,17 +31,24 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               مورد علاقه ها
             </Link>
 
-            <Link
-              href="/dashboard/uploadVideo"
-              className="block p-3 rounded hover:bg-gray-200 font-IranYekanWebBold"
-            >
-              آپلود ویدیو جدید
-            </Link>
+            {session?.user.isAdmin === "true" && (
+              <>
+                <Link
+                  href="/dashboard/uploadVideo"
+                  className="block p-3 rounded hover:bg-gray-200 font-IranYekanWebBold"
+                >
+                  آپلود ویدیو جدید
+                </Link>
+                <Link className="block p-3 rounded hover:bg-gray-200 font-IranYekanWebBold" href={`/dashboard/myPosts/${session.user.id}`}>
+                  پست های من
+                </Link>
+              </>
+            )}
           </ul>
         </div>
 
         {/* Main Content */}
-        <div className="pr-4 pt-4 w-full md:w-1/3">{children}</div>
+        <div className="pr-4 pt-4 w-full">{children}</div>
       </div>
 
       {/* Mobile Menu Button */}

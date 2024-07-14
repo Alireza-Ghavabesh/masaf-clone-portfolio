@@ -25,6 +25,7 @@ const handler = NextAuth({
           firstName: firstName,
           lastName: lastName,
           email: email,
+          isAdmin: isAdmin
         });
         return {
           id: userId,
@@ -54,7 +55,7 @@ const handler = NextAuth({
       session.user.id = token.id as string;
       session.user.firstName = token.firstName as string;
       session.user.lastName = token.lastName as string;
-      session.user.isAdmin = token.isAdmin as boolean;
+      session.user.isAdmin = token.isAdmin as any;
       session.user.email = token.email as string;
       return session;
     },

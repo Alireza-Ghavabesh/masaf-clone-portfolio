@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 import {
   faFilm,
@@ -10,12 +12,18 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { convertToPersianNumbers, delaySimulator } from "@/utils/utils";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
-type props = {
+type GridSingleVideoProps = {
+  title: string;
   href: string;
   src: string;
   desc: string;
   date: string;
+  isAdmin: boolean;
+  category: string;
+  postId?: number;
+  authorId?: number;
 };
 
 function SkeletonLoader() {
@@ -50,7 +58,9 @@ function SkeletonLoader() {
   );
 }
 
-function GridSingleVideo(props: props) {
+function GridSingleVideo(props: GridSingleVideoProps) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -62,37 +72,78 @@ function GridSingleVideo(props: props) {
     return <SkeletonLoader />;
   }
 
+  const deletePost = async (postId: number) => {
+    const fd = new FormData();
+    fd.append('postId', JSON.stringify(postId));
+
+    const res = await fetch("http://localhost:8000/api/deletePost", {
+      method: "POST",
+      body: fd,
+      cache: 'no-cache'
+    });
+    
+    const result = res.json()
+    console.log(result)
+  };
+
   return (
-    <Link
-      href={props.href}
-      className="flex flex-col p-4 bg-[#F8F8F6] border gap-2"
-    >
+    <div className="flex flex-col p-4 bg-[#F8F8F6] border gap-2">
       <div className="w-full h-48 relative cursor-pointer">
-        <Image
-          src={props.src}
-          alt="سخنرانی استاد رائفی پور - مراسم دعای ندبه جلسه 35"
-          width={1000}
-          height={1000}
-          className="object-cover h-full w-full"
-        />
+        <Link href={props.href}>
+          <Image
+            src={props.src}
+            alt="سخنرانی استاد رائفی پور - مراسم دعای ندبه جلسه 35"
+            width={1000}
+            height={1000}
+            className="object-cover h-full w-full"
+          />
+        </Link>
+
         <button className="bg-black bg-opacity-50 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-full text-white text-xs p-3 w-10 h-10  ">
           <FontAwesomeIcon icon={faPlay} size="xl" />
         </button>
       </div>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-4">
         <div className="font-IRANSansWeb font-bold flex gap-3">
-          <p className="text-right">{props.desc}</p>
+          <p className="text-right">{props.title}</p>
           <FontAwesomeIcon icon={faFilm} size="xl" />
         </div>
-        <div className="flex justify-between font-IRANSansWeb px-1">
-          <div>سخنرانی</div>
-          <div className="flex gap-2 items-center">
-            {convertToPersianNumbers(props.date)}
-            <FontAwesomeIcon icon={faCalendarAlt} size="xl" />
+        <div className="flex justify-between font-IRANSansWeb px-1 flex-wrap gap-7 items-center">
+          <div className="flex justify-between w-full">
+            {session?.user.id == props.authorId && (
+              <>
+                <button
+                  className="font-IranYekanWebBold bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => {
+                    router.push(`/dashboard/editPost/${props.postId}`);
+                  }}
+                >
+                  ویرایش
+                </button>
+                <button
+                  className="font-IranYekanWebBold bg-red-500 hover:bg-blue-gray-400 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => {
+                    if (props.postId) {
+                      return deletePost(props.postId);
+                    }
+                  }}
+                >
+                  حذف
+                </button>
+              </>
+            )}
+          </div>
+
+          <div className="flex gap-2 items-center justify-between w-full">
+            <div className="flex gap-2">
+              {convertToPersianNumbers(props.date)}
+              <FontAwesomeIcon icon={faCalendarAlt} size="xl" />
+            </div>
+            <div>{props.category}</div>
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

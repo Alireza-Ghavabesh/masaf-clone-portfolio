@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import imageMasaf from "@/public/jpgs/masaf.jpg";
 import { convertToPersianNumbers } from "@/utils/utils";
@@ -8,7 +8,48 @@ import { faCalendarAlt, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import downloadIcon from "@/public/svgs/content/download.svg";
 import AudioPlayer from "@/components/audioPlayer/audioPlayer";
 
-function page() {
+type singlePostStateType = {
+  id: number;
+  title: string;
+  content: string;
+  jalaliDate: string;
+  score: string;
+  category: string;
+  authorId: number;
+  videos: {
+    url: string;
+    audios: {
+      url: string;
+    }[];
+  }[];
+};
+
+function page({ params }: { params: { postId: string } }) {
+  const [post, setPost] = useState<singlePostStateType>();
+
+  // Send request to server whenever selectedCategories change
+  useEffect(() => {
+    // Make your API request here using selectedCategories
+    // Example: fetchPosts(selectedCategories);
+
+    async function getSinglePost() {
+      const fd = new FormData();
+
+      fd.append(`postId`, params.postId);
+      fd.append("withVideos", "withVideos");
+
+      const res = await fetch("http://localhost:8000/api/getPost", {
+        body: fd,
+        method: "POST",
+      });
+      const posts = await res.json();
+      setPost(() => posts[0]);
+      console.log(posts[0]);
+    }
+
+    getSinglePost();
+  }, []);
+
   return (
     <div
       dir="rtl"
@@ -16,7 +57,7 @@ function page() {
     >
       <div className="bg-white rounded-2xl border lg:w-6/12">
         <div className="font-IRANSansWeb text-2xl line-clamp-2 px-5 font-bold mt-4">
-          سخنرانی استاد رائفی پور - ایران پرچم دار یکتاپرستی
+          {post?.title}
         </div>
         <div className="flex flex-col md:flex-row items-center justify-between my-8 gap-5 md:gap-0 px-5">
           <div className="flex gap-2 items-center">
@@ -27,69 +68,69 @@ function page() {
               height={1000}
               className="w-20 h-20 rounded-full"
             />
-            <div className="font-IRANSansWeb">سخنرانی</div>
+            <div className="font-IRANSansWeb">{post?.category}</div>
           </div>
           <div className="flex gap-6 items-center">
             <div className="flex gap-2 items-center font-IRANSansWeb">
               <FontAwesomeIcon icon={faCalendarAlt} size="1x" />
-              {convertToPersianNumbers("1402/06/29")}
+              {convertToPersianNumbers(`${post?.jalaliDate}`)}
             </div>
             <div className="font-IRANSansWeb">
-              {convertToPersianNumbers("4")} امتیاز
+              {convertToPersianNumbers(`${post?.score}`)} امتیاز
             </div>
             <div className="flex gap-2 p-2 border rounded-lg items-center">
               <FontAwesomeIcon icon={faThumbsUp} size="1x" />
-              <div className="font-IRANSansWeb">علاقمندی ها</div>
+              <button className="font-IRANSansWeb">علاقمندی ها</button>
             </div>
           </div>
         </div>
-        <div>
-          <video
-            width="320"
-            height="240"
-            controls
-            preload="none"
-            className="w-full px-5 mb-5"
-          >
-            <source
-              src="https://cdn.masaf.ir/contents/media/video/Iran_Parcham_1080.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
+        <div className="flex flex-col gap-3">
+          {post?.videos.map((video) => (
+            <>
+              <video
+                width="320"
+                height="240"
+                controls
+                preload="none"
+                className="w-full px-5 mb-5"
+                poster={`http://localhost:8000/2006029_274.png`}
+                // poster={`http://localhost:8000/${video.thumbnail}`}
+              >
+                <source
+                  // src="https://cdn.masaf.ir/contents/media/video/Iran_Parcham_1080.mp4"
+                  src={`http://localhost:8000/${video.url}`}
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              <div className="px-5 py-2 font-IRANSansWeb">
+                <div className="border rounded-2xl px-5 flex flex-col gap-4 py-10">
+                  <div className="flex gap-2">
+                    <Image src={downloadIcon} alt="" />
+                    <div>دانلود این ویدیو</div>
+                  </div>
+                  <div className="p-2 rounded-2xl  border flex justify-end">
+                    <button className="bg-zzomorod text-white rounded-lg p-2">
+                      دانلود
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 mt-5 mb-20">
+                {video.audios.map((audio) => (
+                  <AudioPlayer
+                    src={
+                      // "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
+                      `http://localhost:8000/${audio.url}`
+                    }
+                    className="w-full px-5"
+                  />
+                ))}
+              </div>
+            </>
+          ))}
         </div>
-        <div className="px-5 py-2 font-IRANSansWeb">
-          <div className="border rounded-2xl px-5 flex flex-col gap-4 py-10">
-            <div className="flex gap-2">
-              <Image src={downloadIcon} alt="" />
-              <div>دانلود این ویدیو</div>
-            </div>
-            <div className="p-2 rounded-2xl  border flex justify-end">
-              <button className="bg-zzomorod text-white rounded-lg p-2">
-                دانلود
-              </button>
-            </div>
-            <div className="p-2 rounded-2xl  border flex justify-end">
-              <button className="bg-zzomorod text-white rounded-lg p-2">
-                دانلود
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-4 mt-5 mb-20">
-          <AudioPlayer
-            src={
-              "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
-            }
-            className="w-full px-5"
-          />
-          <AudioPlayer
-            src={
-              "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
-            }
-            className="w-full px-5"
-          />
-        </div>
+
         <div className="flex gap-4 items-center font-IRANSansWeb px-5">
           <hr className="w-full" />
           <div className="whitespace-nowrap">آیا این مطلب را دوست داشتید؟</div>

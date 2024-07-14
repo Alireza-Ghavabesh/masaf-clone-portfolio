@@ -121,6 +121,7 @@ export default function LoginPage() {
         }
       } else {
         const responseLogin = await res.json();
+        console.log(responseLogin)
         // Handle successful login
         toast.success("ورود به حساب کاربری", {
           position: "top-center",

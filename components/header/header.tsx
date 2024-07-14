@@ -47,14 +47,27 @@ function Header() {
                 </Link>
               )}
 
-              {status === "authenticated" && (
-                <button
-                  onClick={() => signOut({ callbackUrl: "/auth/login" })}
-                  className="justify-center w-full h-full border font-IranYekanWebBold flex items-center gap-1 px-1 rounded-lg"
-                >
-                  <div>خروج</div> <FontAwesomeIcon icon={faSignOut} />
-                </button>
-              )}
+              <div className="flex gap-2 w-full h-full">
+                {status === "authenticated" && (
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                    className="justify-center w-2/3 h-full border font-IranYekanWebBold flex items-center gap-1 px-1 rounded-lg"
+                  >
+                    <div>خروج</div> <FontAwesomeIcon icon={faSignOut} />
+                  </button>
+                )}
+
+                {status === "authenticated" && (
+                  <Link
+                    className="w-1/3 hover:border-2 border font-IranYekanWebBold h-full my-auto px-3 flex items-center gap-1 py-2 rounded-lg"
+                    href={"/dashboard/etelaatkarbari"}
+                  >
+                    <div className="w-full flex justify-center">
+                      <FontAwesomeIcon icon={faUserAlt} />
+                    </div>
+                  </Link>
+                )}
+              </div>
 
               {status === "loading" && (
                 <div className="bg-gray-400 rounded-2xl animate-pulse w-full h-full"></div>
@@ -185,6 +198,10 @@ function Header() {
                 >
                   <FontAwesomeIcon icon={faUserAlt} />
                 </Link>
+              )}
+
+              {session?.user.isAdmin === "true" && (
+                <div className="h-full flex items-center w-10 hover:border-2 border rounded-lg px-9 justify-center">مدیر</div>
               )}
 
               {status === "loading" && (
