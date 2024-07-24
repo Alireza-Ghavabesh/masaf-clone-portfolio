@@ -34,7 +34,7 @@ export default function LoginPage() {
       );
       // Trigger the sign-in process
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ADDRESS}/api/auth/login`,
+        `${process.env.NEXT_PUBLIC_RESTAPI_ADDRESS}/auth/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -37,7 +37,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                   href="/dashboard/uploadVideo"
                   className="block p-3 rounded hover:bg-gray-200 font-IranYekanWebBold"
                 >
-                  آپلود ویدیو جدید
+                  ایجاد پست جدید
                 </Link>
                 <Link className="block p-3 rounded hover:bg-gray-200 font-IranYekanWebBold" href={`/dashboard/myPosts/${session.user.id}`}>
                   پست های من

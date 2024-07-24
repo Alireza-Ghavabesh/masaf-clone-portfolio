@@ -78,9 +78,9 @@ function UploadVideo() {
     console.log(data.content);
     console.log(formData.category);
 
-    for (var pair of fd.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
+    // for (var pair of fd.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
 
     // Append each video object and related files
     if (formData.videos) {

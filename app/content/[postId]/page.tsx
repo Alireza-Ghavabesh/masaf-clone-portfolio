@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import downloadIcon from "@/public/svgs/content/download.svg";
 import AudioPlayer from "@/components/audioPlayer/audioPlayer";
+import PostGallery from "@/components/slider/PostGallery";
+import { usePost } from "@/contexts/postContext";
 
 type singlePostStateType = {
   id: number;
@@ -22,33 +24,41 @@ type singlePostStateType = {
       url: string;
     }[];
   }[];
+  images: {
+    url: string;
+  }[];
 };
 
 function page({ params }: { params: { postId: string } }) {
-  const [post, setPost] = useState<singlePostStateType>();
+  // const [post, setPost] = useState<singlePostStateType>();
 
-  // Send request to server whenever selectedCategories change
-  useEffect(() => {
-    // Make your API request here using selectedCategories
-    // Example: fetchPosts(selectedCategories);
+  // // Send request to server whenever selectedCategories change
+  // useEffect(() => {
+  //   // Make your API request here using selectedCategories
+  //   // Example: fetchPosts(selectedCategories);
 
-    async function getSinglePost() {
-      const fd = new FormData();
+  //   async function getSinglePost() {
+  //     const fd = new FormData();
 
-      fd.append(`postId`, params.postId);
-      fd.append("withVideos", "withVideos");
+  //     fd.append(`postId`, params.postId);
+  //     fd.append("withVideos", "withVideos");
+  //     // fd.append("withImages", "withImages");
 
-      const res = await fetch("http://localhost:8000/api/getPost", {
-        body: fd,
-        method: "POST",
-      });
-      const posts = await res.json();
-      setPost(() => posts[0]);
-      console.log(posts[0]);
-    }
+  //     const res = await fetch("http://localhost:8000/api/getPost", {
+  //       body: fd,
+  //       method: "POST",
+  //     });
+  //     const posts = await res.json();
+  //     setPost(() => posts[0]);
+  //     console.log(posts[0]);
+  //   }
 
-    getSinglePost();
-  }, []);
+  //   getSinglePost();
+  // }, []);
+
+  const { post } = usePost();
+
+  console.log(post);
 
   return (
     <div
@@ -57,7 +67,7 @@ function page({ params }: { params: { postId: string } }) {
     >
       <div className="bg-white rounded-2xl border lg:w-6/12">
         <div className="font-IRANSansWeb text-2xl line-clamp-2 px-5 font-bold mt-4">
-          {post?.title}
+          {post.title}
         </div>
         <div className="flex flex-col md:flex-row items-center justify-between my-8 gap-5 md:gap-0 px-5">
           <div className="flex gap-2 items-center">
@@ -68,15 +78,15 @@ function page({ params }: { params: { postId: string } }) {
               height={1000}
               className="w-20 h-20 rounded-full"
             />
-            <div className="font-IRANSansWeb">{post?.category}</div>
+            <div className="font-IRANSansWeb">{post.category}</div>
           </div>
           <div className="flex gap-6 items-center">
             <div className="flex gap-2 items-center font-IRANSansWeb">
               <FontAwesomeIcon icon={faCalendarAlt} size="1x" />
-              {convertToPersianNumbers(`${post?.jalaliDate}`)}
+              {convertToPersianNumbers(`${post.jalaliDate}`)}
             </div>
             <div className="font-IRANSansWeb">
-              {convertToPersianNumbers(`${post?.score}`)} امتیاز
+              {convertToPersianNumbers(`${post.score}`)} امتیاز
             </div>
             <div className="flex gap-2 p-2 border rounded-lg items-center">
               <FontAwesomeIcon icon={faThumbsUp} size="1x" />
@@ -85,7 +95,7 @@ function page({ params }: { params: { postId: string } }) {
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          {post?.videos.map((video) => (
+          {post.videos.map((video: any) => (
             <>
               <video
                 width="320"
@@ -117,7 +127,7 @@ function page({ params }: { params: { postId: string } }) {
                 </div>
               </div>
               <div className="flex flex-col gap-4 mt-5 mb-20">
-                {video.audios.map((audio) => (
+                {video.audios.map((audio: any) => (
                   <AudioPlayer
                     src={
                       // "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
@@ -130,6 +140,7 @@ function page({ params }: { params: { postId: string } }) {
             </>
           ))}
         </div>
+        {/* <div>{post?.images && <PostGallery imageUrls={post.images} />}</div> */}
 
         <div className="flex gap-4 items-center font-IRANSansWeb px-5">
           <hr className="w-full" />

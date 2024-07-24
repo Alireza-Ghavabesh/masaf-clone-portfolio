@@ -54,6 +54,7 @@ function page() {
       console.log(posts);
     }
 
+    console.log(session?.user.id)
     getPosts();
   }, []);
 
@@ -347,7 +348,7 @@ function page() {
                   isAdmin={session?.user.isAdmin as boolean}
                   category={post.category}
                   postId={post.id}
-                  authorId={post.authorId}
+                  authorId={post.userId}
                   title={post.title}
                 />
               ))}

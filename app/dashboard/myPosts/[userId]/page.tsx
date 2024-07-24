@@ -10,7 +10,7 @@ export type postStateType = {
   jalaliDate: string;
   score: string;
   category: string;
-  authorId: number;
+  userId: number;
 };
 
 function MyPostsPage({ params }: { params: { userId: string } }) {
@@ -51,7 +51,7 @@ function MyPostsPage({ params }: { params: { userId: string } }) {
                 isAdmin={session?.user.isAdmin as boolean}
                 category={post.category}
                 postId={post.id}
-                authorId={post.authorId}
+                authorId={post.userId}
                 title={post.title}
               />
             ))}

@@ -6,6 +6,8 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import Header from "../components/header/header";
 import SessionWrapper from "@/components/SessionWrapper";
 config.autoAddCss = false;
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "موسسه مصاف ایرانیان",
@@ -21,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <SessionWrapper>
         <body className="bg-[#F8F8F6] flex flex-col min-h-screen">
+        <ToastContainer />
           <Header />
           <div className="flex-grow py-4">{children}</div>
           <Footer />

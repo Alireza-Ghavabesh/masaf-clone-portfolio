@@ -70,7 +70,7 @@ export default function RegisterPage() {
         password: password,
       });
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ADDRESS}/api/auth/register`,
+        `${process.env.NEXT_PUBLIC_RESTAPI_ADDRESS}/auth/register`,
         {
           method: "POST",
           body: JSON.stringify({
