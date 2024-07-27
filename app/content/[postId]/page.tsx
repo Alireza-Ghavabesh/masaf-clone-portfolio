@@ -9,6 +9,11 @@ import downloadIcon from "@/public/svgs/content/download.svg";
 import AudioPlayer from "@/components/audioPlayer/audioPlayer";
 import PostGallery from "@/components/slider/PostGallery";
 import { usePost } from "@/contexts/postContext";
+import { CommentList } from "@/components/CommentList/CommentList";
+import { CommentForm } from "@/components/CommentForm/CommentForm";
+import { useAsyncFn } from "@/hooks/useAsync";
+import { createComment } from "@/services/comments";
+import { useSession } from "next-auth/react";
 
 type singlePostStateType = {
   id: number;
@@ -30,35 +35,21 @@ type singlePostStateType = {
 };
 
 function page({ params }: { params: { postId: string } }) {
-  // const [post, setPost] = useState<singlePostStateType>();
+  const { post, rootComments, createLocalComment } = usePost();
+  const {
+    loading,
+    error,
+    execute: createCommentFn,
+  } = useAsyncFn(createComment);
+  const { data: session, status } = useSession();
 
-  // // Send request to server whenever selectedCategories change
-  // useEffect(() => {
-  //   // Make your API request here using selectedCategories
-  //   // Example: fetchPosts(selectedCategories);
-
-  //   async function getSinglePost() {
-  //     const fd = new FormData();
-
-  //     fd.append(`postId`, params.postId);
-  //     fd.append("withVideos", "withVideos");
-  //     // fd.append("withImages", "withImages");
-
-  //     const res = await fetch("http://localhost:8000/api/getPost", {
-  //       body: fd,
-  //       method: "POST",
-  //     });
-  //     const posts = await res.json();
-  //     setPost(() => posts[0]);
-  //     console.log(posts[0]);
-  //   }
-
-  //   getSinglePost();
-  // }, []);
-
-  const { post } = usePost();
-
-  console.log(post);
+  function onCommentCreate(text: string) {
+    return createCommentFn({
+      postId: post.id,
+      text: text,
+      userId: session?.user.id,
+    }).then(createLocalComment);
+  }
 
   return (
     <div
@@ -168,26 +159,30 @@ function page({ params }: { params: { postId: string } }) {
           </h1>
         </div>
         <div className="px-5 flex flex-col gap-2 mb-10">
-          <div className="font-IRANSansWeb">دیدگاهتان را بنویسید</div>
-          <textarea
-            rows={4}
-            placeholder="متن دیدگاه خود را اینجا بنویسید"
-            className="border border-neutral-500 w-full placeholder:text-xs px-2 py-4 rounded-lg group-focus-within:border-primary-500 focus:outline-none "
-            id="comment"
-          ></textarea>
-          <div className="mt-5">
-            <button className="border py-1 px-3 rounded-lg bg-zzomorod hover:bg-zinc-600 text-white">
-              ثبت دیدگاه
-            </button>
-          </div>
-          <div className="flex gap-4 items-center mt-4">
-            <div className="flex gap-1 whitespace-nowrap items-center">
-              <div>دیدگاه ها</div>
-              <div className="border rounded-full text-white bg-zzomorod px-2">
-                {convertToPersianNumbers("0")}
+          <CommentForm
+            loading={loading}
+            error={error}
+            onSubmit={onCommentCreate}
+          />
+
+          <div className="flex flex-col">
+            <div className="flex gap-4 items-center mt-4">
+              <div className="flex gap-1 whitespace-nowrap items-center">
+                <div>دیدگاه ها</div>
+                <div className="border rounded-full text-white bg-zzomorod px-2">
+                  {convertToPersianNumbers("0")}
+                </div>
               </div>
+              <hr className="w-full" />
             </div>
-            <hr className="w-full" />
+            <section className="w-full">
+              <div className="mt-4"></div>
+              {rootComments != null && rootComments.length > 0 && (
+                <div className="mt-4">
+                  <CommentList comments={rootComments} />
+                </div>
+              )}
+            </section>
           </div>
         </div>
       </div>

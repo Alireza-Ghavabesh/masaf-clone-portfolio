@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useState, useMemo, useEffect } from "react";
 import { useAsync } from "@/hooks/useAsync";
 import { useParams } from "next/navigation";
 import { getPost } from "@/services/posts";
@@ -18,10 +18,35 @@ export function PostProvider({ children }) {
     value: post,
   } = useAsync(() => getPost(params.postId), [params.postId]);
   const id = params.postId;
+
+  const [comments, setComments] = useState([]);
+  const commentsByParentId = useMemo(() => {
+    const group = {};
+    comments.forEach((comment) => {
+      group[comment.parentId] ||= [];
+      group[comment.parentId].push(comment);
+    });
+    return group;
+  }, [comments]);
+
+  useEffect(() => {
+    if (post?.comments == null) return;
+    setComments(post.comments);
+  }, [post?.comments]);
+
+  function getReplies(parentId) {
+    return commentsByParentId[parentId];
+  }
+
+  function createLocalComment(comment) {
+    console.log(comment);
+    setComments((prevComments) => {
+      return [comment, ...prevComments];
+    });
+  }
+
   return (
     <>
-      {error && <div>Error: {error}</div>}
-      {loading && <div>Loading...</div>}
       {post && (
         <Context.Provider
           value={{
@@ -29,6 +54,9 @@ export function PostProvider({ children }) {
               id,
               ...post,
             },
+            getReplies,
+            rootComments: commentsByParentId[null],
+            createLocalComment,
           }}
         >
           {children}
