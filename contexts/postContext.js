@@ -3,6 +3,7 @@ import React, { useContext, useState, useMemo, useEffect } from "react";
 import { useAsync } from "@/hooks/useAsync";
 import { useParams } from "next/navigation";
 import { getPost } from "@/services/posts";
+import { useSession } from "next-auth/react";
 
 const Context = React.createContext();
 
@@ -12,11 +13,20 @@ export function usePost() {
 
 export function PostProvider({ children }) {
   const params = useParams();
+  const { data: session, status } = useSession();
+
+  // if user authenticated => getPost with userId
+  // if user is not authenticated => getPost without userId
+
   const {
     loading,
     error,
     value: post,
-  } = useAsync(() => getPost(params.postId), [params.postId]);
+  } = useAsync(
+    () => getPost({ postId: params.postId, userId: session?.user.id }),
+    [params.postId, session?.user.id]
+  );
+  console.log(status);
   const id = params.postId;
 
   const [comments, setComments] = useState([]);
@@ -39,9 +49,50 @@ export function PostProvider({ children }) {
   }
 
   function createLocalComment(comment) {
-    console.log(comment);
     setComments((prevComments) => {
       return [comment, ...prevComments];
+    });
+  }
+
+  function updateLocalComment(commentId, text) {
+    setComments((prevComments) => {
+      return prevComments.map((comment) => {
+        if (comment.id === commentId) {
+          return { ...comment, text: text };
+        } else {
+          return comment;
+        }
+      });
+    });
+  }
+
+  function deleteLocalComment(commentId) {
+    setComments((prevComments) => {
+      return prevComments.filter((comment) => comment.id != commentId);
+    });
+  }
+
+  function toggleLocalCommentLike(commentId, addLike) {
+    setComments((prevComments) => {
+      return prevComments.map((comment) => {
+        if (commentId == comment.id) {
+          if (addLike) {
+            return {
+              ...comment,
+              likeCount: comment.likeCount + 1,
+              likedByMe: true,
+            };
+          } else {
+            return {
+              ...comment,
+              likeCount: comment.likeCount - 1,
+              likedByMe: false,
+            };
+          }
+        } else {
+          return comment;
+        }
+      });
     });
   }
 
@@ -57,6 +108,9 @@ export function PostProvider({ children }) {
             getReplies,
             rootComments: commentsByParentId[null],
             createLocalComment,
+            updateLocalComment,
+            deleteLocalComment,
+            toggleLocalCommentLike,
           }}
         >
           {children}

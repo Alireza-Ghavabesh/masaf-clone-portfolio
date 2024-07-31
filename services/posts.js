@@ -6,9 +6,11 @@ export function getPosts() {
   });
 }
 
-export function getPost(id) {
+export function getPost({ postId, userId, status }) {
   const fd = new FormData();
-  fd.append("postId", id);
+  fd.append("postId", postId);
+  fd.append("userId", userId);
+
   return makeRequest(`/singlePost`, {
     method: "POST",
     data: fd,
