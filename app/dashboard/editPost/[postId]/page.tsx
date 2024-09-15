@@ -8,7 +8,7 @@ import { faCalendarAlt, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import downloadIcon from "@/public/svgs/content/download.svg";
 import AudioPlayer from "@/components/audioPlayer/audioPlayer";
 
-export default function Page ({ params }: { params: { postId: string } }) {
+export default function Page({ params }: { params: { postId: string } }) {
   return (
     <div
       dir="rtl"
@@ -81,13 +81,11 @@ export default function Page ({ params }: { params: { postId: string } }) {
             src={
               "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
             }
-            className="w-full px-5"
           />
           <AudioPlayer
             src={
               "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
             }
-            className="w-full px-5"
           />
         </div>
         <div className="flex gap-4 items-center font-IRANSansWeb px-5">

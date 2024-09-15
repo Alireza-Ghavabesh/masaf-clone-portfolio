@@ -50,12 +50,12 @@ function UploadVideo() {
     title: string;
     content: string;
     category: string;
-    videos:
-      | {
-          file: File | null;
-          audios: File[] | null;
-        }[]
-      | null;
+    videos: {
+      thumbnail: File;
+      file: File | null;
+      audios: File[] | null;
+    }[]
+    | null;
     images: FileList[] | null;
   }>({
     title: "",
@@ -85,6 +85,7 @@ function UploadVideo() {
     // Append each video object and related files
     if (formData.videos) {
       formData.videos.forEach((video, index) => {
+        fd.append(`videos[${index}][thumbnail]`, video.thumbnail as any);
         fd.append(`videos[${index}][file]`, video.file as any);
         if (video.audios) {
           video.audios.forEach((audioFile, audioIndex) => {
@@ -103,7 +104,9 @@ function UploadVideo() {
       });
     }
 
-    // console.log(formData.images)
+    console.log(formData.videos?.forEach(video => {
+      console.log(video.thumbnail)
+    }))
 
     const response = await fetch(`http://localhost:8000/api/post`, {
       method: "POST",
@@ -193,10 +196,7 @@ function UploadVideo() {
         className="border-2 outline-none px-2 rounded-lg h-64"
         {...register("content")}
       />
-      <select
-        name=""
-        id=""
-        onChange={(e) => {
+      <select name="select" key={"select_key"} id="select_id" title="choose_category" onChange={(e) => {
           setFormData((prevFormData) => ({
             ...prevFormData,
             category: e.target.value,
@@ -207,8 +207,8 @@ function UploadVideo() {
         <option key={"option"} value="">
           انتخاب دسته
         </option>
-        {categorys.map((category) => (
-          <option key={category} value={category}>
+        {categorys.map((category, indexCategory) => (
+          <option key={indexCategory} value={category}>
             {category}
           </option>
         ))}
@@ -218,9 +218,11 @@ function UploadVideo() {
         onClick={handleAddNewVideoInput}
         className="cursor-pointer whitespace-nowrap rounded-lg px-1 py-2 border flex gap-2 items-center"
       >
-        <FontAwesomeIcon icon={faPlusCircle} size="2xl" onClick={() => {}} />
+        <FontAwesomeIcon icon={faPlusCircle} size="2xl" onClick={() => { }} />
         <div>اضافه کردن ویدیو</div>
       </div>
+
+
 
       {formData.videos &&
         formData.videos.map((video, videoIndex) => (
@@ -235,7 +237,7 @@ function UploadVideo() {
                 className=""
                 icon={faRemove}
                 size="2xl"
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </button>
             <div
@@ -245,30 +247,69 @@ function UploadVideo() {
               <FontAwesomeIcon
                 icon={faPlusSquare}
                 size="2xl"
-                onClick={() => {}}
+                onClick={() => { }}
               />
-              <div className="cursor-pointer p-2 rounded-lg relative hover:bg-lime-200">
-                <div className="">انتخاب ویدیو</div>
-                <input
-                  type="file"
-                  onInput={(e: any) => {
-                    const file = e.target.files[0];
-                    setFormData((prevData) => {
-                      const updatedVideos = [...(prevData.videos as any)];
+              <div className="flex flex-col gap-2">
+                <div className="cursor-pointer p-2 rounded-lg relative hover:bg-lime-200">
+                  <div className="">انتخاب ویدیو</div>
+                  <input
+                    type="file"
+                    onInput={(e: any) => {
+                      const file = e.target.files[0];
+                      setFormData((prevData) => {
+                        const updatedVideos = [...(prevData.videos as any)];
 
-                      updatedVideos[videoIndex] = {
-                        file: file,
-                        audios: [],
-                      };
+                        updatedVideos[videoIndex] = {
+                          file: file,
+                          audios: [],
+                        };
 
-                      return {
-                        ...prevData,
-                        videos: updatedVideos,
-                      };
-                    });
-                  }}
-                  className="absolute opacity-0 w-full top-0 h-full"
-                />
+                        return {
+                          ...prevData,
+                          videos: updatedVideos,
+                        };
+                      });
+                    }}
+                    className="absolute opacity-0 w-full top-0 h-full"
+                  />
+                </div>
+
+              </div>
+            </div>
+            <div
+              key={`thumbnail-${videoIndex}`}
+              className="flex gap-2 items-center border-t border-b px-2"
+            >
+              <FontAwesomeIcon
+                icon={faPlusSquare}
+                size="2xl"
+                onClick={() => { }}
+              />
+              <div className="flex flex-col gap-2">
+                <div className="cursor-pointer p-2 rounded-lg relative hover:bg-lime-200">
+                  <div className="">انتخاب تامنیل ویدیو (پوستر)</div>
+                  <input
+                    type="file"
+                    onInput={(e: any) => {
+                      const file = e.target.files[0];
+                      setFormData((prevData) => {
+                        const updatedVideos = [...(prevData.videos as any)];
+
+                        updatedVideos[videoIndex] = {
+                          ...updatedVideos[videoIndex],
+                          thumbnail: file,
+                        };
+
+                        return {
+                          ...prevData,
+                          videos: updatedVideos,
+                        };
+                      });
+                    }}
+                    className="absolute opacity-0 w-full top-0 h-full"
+                  />
+                </div>
+
               </div>
             </div>
             <div
@@ -278,13 +319,13 @@ function UploadVideo() {
               <FontAwesomeIcon
                 icon={faPlusCircle}
                 size="2xl"
-                onClick={() => {}}
+                onClick={() => { }}
               />
               <div>اضافه کردن صوت</div>
             </div>
             {video.audios &&
               video.audios.map((audio, audioIndex) => (
-                <div className="flex flex-col gap-2">
+                <div key={audioIndex} className="flex flex-col gap-2">
                   <div
                     key={audioIndex}
                     className="flex justify-between gap-2 items-center border-2 mt-2 border-t border-b p-2 rounded-lg border-green-300"
@@ -293,7 +334,7 @@ function UploadVideo() {
                       <FontAwesomeIcon
                         icon={faPlusSquare}
                         size="2xl"
-                        onClick={() => {}}
+                        onClick={() => { }}
                       />
 
                       <div className="cursor-pointer p-2 justify-between rounded-lg relative hover:bg-lime-200 ">
@@ -324,7 +365,7 @@ function UploadVideo() {
                         className=""
                         icon={faRemove}
                         size="2xl"
-                        onClick={() => {}}
+                        onClick={() => { }}
                       />
                     </button>
                   </div>
@@ -339,7 +380,7 @@ function UploadVideo() {
             icon={faImages}
             className="mt-1"
             size="2xl"
-            onClick={() => {}}
+            onClick={() => { }}
           />
 
           <div className="cursor-pointer p-2 justify-between rounded-lg relative hover:bg-lime-200">
@@ -360,7 +401,7 @@ function UploadVideo() {
         </div>
       </div>
       <input
-        className="border h-12 text-2xl"
+        className="border h-12 text-2xl hover:cursor-pointer hover:border-zomorod"
         type="submit"
         value={`${isSubmiting ? "درحال ارسال..." : "ثبت"}`}
         disabled={isSubmiting}

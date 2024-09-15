@@ -125,15 +125,15 @@ function Footer() {
           </ul>
           <div className="flex gap-4 justify-end pr-5">
             <ul className="flex flex-col gap-2">
-              <li>منتخب مطالب واحد ها</li>
-              <li>سخنرانی ها</li>
-              <li>کلیپ ها</li>
-              <li>گالری مراسم</li>
-              <li>توییت ها</li>
-              <li>اطلاع رسانی</li>
-              <li>نظرسنجی ها</li>
-              <li>دعوت از استاد</li>
-              <li>درباره ما و ارتباط با ما</li>
+              <li key={1}>منتخب مطالب واحد ها</li>
+              <li key={2}>سخنرانی ها</li>
+              <li key={3}>کلیپ ها</li>
+              <li key={4}>گالری مراسم</li>
+              <li key={5}>توییت ها</li>
+              <li key={6}>اطلاع رسانی</li>
+              <li key={7}>نظرسنجی ها</li>
+              <li key={8}>دعوت از استاد</li>
+              <li key={9}>درباره ما و ارتباط با ما</li>
             </ul>
           </div>
           <div className="text-xl font-IRANSansWeb font-bold mt-5 pr-5">

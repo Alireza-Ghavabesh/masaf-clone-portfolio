@@ -92,6 +92,7 @@ export default function AdminRegisterPage() {
         }
       );
       const registerResult = await res.json();
+      console.log(registerResult)
       if (registerResult.status === "OK") {
         toast.success("لینک فعال سازی به ایمیل شما فرستاده شد", {
           position: "top-center",
@@ -108,6 +109,7 @@ export default function AdminRegisterPage() {
             textAlign: "right",
           },
         });
+        setIsRegistering(() => false);
       } else {
         toast.error("با این ایمیل قبلا ثبت نام کرده اید", {
           position: "top-right",
@@ -181,35 +183,41 @@ export default function AdminRegisterPage() {
                 placeholder="ایمیل را وارد کنید"
                 className="rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none mt-2 border text-center"
               />
-              <input
-                disabled={isRegistering}
-                onChange={async (e) => {
-                  await (async () => {
-                    if (e.target.value !== "") {
-                      const r = passwordStrength(e.target.value).value;
-                      setPassword(() => e.target.value);
-                      if (r === "Too weak") {
-                        setPassStrength(() => "خیلی ضعیف");
-                      } else if (r === "Weak") {
-                        setPassStrength(() => "ضعیف");
-                      } else if (r === "Medium") {
-                        setPassStrength(() => "متوسط");
-                      } else if (r === "Strong") {
-                        setPassStrength(() => "قوی");
+              <div className="flex gap-2 items-center">
+                {passStrength && <div className="flex justify-center items-center border w-[20%] text-center rounded-lg h-full">
+                  {passStrength}
+                </div>}
+                <input
+                  className="w-[80%] h-full  rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none border text-center"
+                  disabled={isRegistering}
+                  onChange={async (e) => {
+                    await (async () => {
+                      if (e.target.value !== "") {
+                        const r = passwordStrength(e.target.value).value;
+                        setPassword(() => e.target.value);
+                        if (r === "Too weak") {
+                          setPassStrength(() => "خیلی ضعیف");
+                        } else if (r === "Weak") {
+                          setPassStrength(() => "ضعیف");
+                        } else if (r === "Medium") {
+                          setPassStrength(() => "متوسط");
+                        } else if (r === "Strong") {
+                          setPassStrength(() => "قوی");
+                        }
+                      } else {
+                        setPassStrength(() => "");
                       }
-                    } else {
-                      setPassStrength(() => "");
-                    }
-                  })().then(() => {
-                    console.log("after set password");
-                  });
-                }}
-                id="password"
-                name="password"
-                type="password"
-                placeholder="رمز عبور خود را وارد کنید"
-                className="rounded-lg focus:border-1 focus:border-zzomorod p-2 outline-none mt-2 border text-center"
-              />
+                    })().then(() => {
+                      console.log("after set password");
+                    });
+                  }}
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="رمز عبور خود را وارد کنید"
+                />
+
+              </div>
               <input
                 disabled={isRegistering}
                 onChange={(e) => setConfirmPassword(() => e.target.value)}

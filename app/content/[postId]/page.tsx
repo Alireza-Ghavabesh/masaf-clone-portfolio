@@ -15,6 +15,10 @@ import { useAsyncFn } from "@/hooks/useAsync";
 import { createComment } from "@/services/comments";
 import { useSession } from "next-auth/react";
 
+import {Player} from 'react-simple-player';
+
+
+
 type singlePostStateType = {
   id: number;
   title: string;
@@ -94,16 +98,16 @@ function page({ params }: { params: { postId: string } }) {
                 controls
                 preload="none"
                 className="w-full px-5 mb-5"
-                poster={`http://localhost:8000/2006029_274.png`}
-                // poster={`http://localhost:8000/${video.thumbnail}`}
+                poster={`http://localhost:8000/stream/thumbnail/${video.thumbnail}`}
               >
                 <source
                   // src="https://cdn.masaf.ir/contents/media/video/Iran_Parcham_1080.mp4"
-                  src={`http://localhost:8000/${video.url}`}
+                  src={`http://localhost:8000/stream/video/${video.url.replace(".mp4", "")}`}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
               </video>
+
               <div className="px-5 py-2 font-IRANSansWeb">
                 <div className="border rounded-2xl px-5 flex flex-col gap-4 py-10">
                   <div className="flex gap-2">
@@ -119,13 +123,16 @@ function page({ params }: { params: { postId: string } }) {
               </div>
               <div className="flex flex-col gap-4 mt-5 mb-20">
                 {video.audios.map((audio: any) => (
-                  <AudioPlayer
-                    src={
-                      // "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
-                      `http://localhost:8000/${audio.url}`
-                    }
-                    className="w-full px-5"
-                  />
+                  <>
+                    {/* <audio controls preload="none" className="w-full px-5 mb-5">
+                      <source src={`http://localhost:8000/stream/audio/${audio.url}`} type="audio/mp3" />
+                      Your browser does not support the audio element.
+                    </audio> */}
+                    <div className="px-4 cursor-pointer" dir="ltr">
+                      <Player src={`http://localhost:8000/stream/audio/${audio.url.replace(".mp3", "")}`} height={40} />
+                    </div>
+                    
+                  </>
                 ))}
               </div>
             </>

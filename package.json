@@ -30,6 +30,7 @@
     "react-hook-form": "^7.52.0",
     "react-icons": "^5.2.1",
     "react-loading-skeleton": "^3.3.1",
+    "react-simple-player": "^1.1.0",
     "react-toastify": "^10.0.5",
     "swiper": "^11.0.5",
     "validator": "^13.12.0",
