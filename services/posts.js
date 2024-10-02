@@ -16,3 +16,14 @@ export function getPost({ postId, userId, status }) {
     data: fd,
   });
 }
+
+
+export function addToFavoritePost({postId, userId}) {
+  const fd = new FormData();
+  fd.append("postId", postId);
+  fd.append("userId", userId);
+  return makeRequest(`/addToFavorite`, {
+    method: "POST",
+    data: fd,
+  });
+}

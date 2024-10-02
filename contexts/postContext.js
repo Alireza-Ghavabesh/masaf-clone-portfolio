@@ -30,6 +30,7 @@ export function PostProvider({ children }) {
   const id = params.postId;
 
   const [comments, setComments] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const commentsByParentId = useMemo(() => {
     const group = {};
     comments.forEach((comment) => {
@@ -42,7 +43,11 @@ export function PostProvider({ children }) {
   useEffect(() => {
     if (post?.comments == null) return;
     setComments(post.comments);
-  }, [post?.comments]);
+
+    if (post?.favorites == null) return;
+    setFavorites(post.favorites);
+    
+  }, [post?.comments, post?.favorites]);
 
   function getReplies(parentId) {
     return commentsByParentId[parentId];
@@ -95,6 +100,8 @@ export function PostProvider({ children }) {
       });
     });
   }
+
+
 
   return (
     <>

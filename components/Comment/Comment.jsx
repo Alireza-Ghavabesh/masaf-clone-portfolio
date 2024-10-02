@@ -8,6 +8,7 @@ import {
   deleteComment,
   toggleCommentLike,
 } from "@/services/comments";
+
 import { CommentForm } from "../CommentForm/CommentForm";
 import { useSession } from "next-auth/react";
 import { useAsyncFn } from "@/hooks/useAsync";
@@ -83,7 +84,7 @@ export function Comment({ id, text, user, createdAt, likeCount, likedByMe }) {
       .execute({ commentId: id, userId: session?.user.id }, [session?.user.id])
       .then(({ addLike }) => toggleLocalCommentLike(id, addLike));
   }
-
+  
   return (
     <>
       <div className="comment">

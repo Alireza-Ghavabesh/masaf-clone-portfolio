@@ -181,7 +181,7 @@ function UploadVideo() {
 
   return (
     <form
-      className="flex flex-col gap-2 px-2 space-y-1 "
+      className="flex flex-col gap-2 px-2 space-y-1 w-full md:w-1/2"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="text-4xl p-1">ایجاد پست جدید</div>

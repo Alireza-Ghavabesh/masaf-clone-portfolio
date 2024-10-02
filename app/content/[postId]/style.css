@@ -1,4 +1,4 @@
-
+@import "~react-image-gallery/styles/css/image-gallery.css";
 
   
   button {
@@ -187,3 +187,13 @@
   .btn[disabled] {
     --color: hsl(var(--hue), 20%, 74%);
   }
+
+
+  .image-gallery-slide img {
+    height: 600px; /* Set the height for the original image */
+  }
+  
+  .image-gallery-thumbnail img {
+    height: 60px; /* Set the height for the thumbnail */
+  }
+

@@ -1,4 +1,4 @@
-export function IconBtn({ Icon, isActive, color, children, ...props }) {
+export function IconBtn({ Icon, isActive, color, children, size, ...props }) {
   return (
     <button
       className={`btn icon-btn ${isActive ? "icon-btn-active" : ""} ${
@@ -7,7 +7,7 @@ export function IconBtn({ Icon, isActive, color, children, ...props }) {
       {...props}
     >
       <span className={`${children != null ? "mr-1" : ""}`}>
-        <Icon />
+        <Icon size={size}/>
       </span>
       {children}
     </button>

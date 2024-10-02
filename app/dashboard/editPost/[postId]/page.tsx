@@ -76,7 +76,7 @@ export default function Page({ params }: { params: { postId: string } }) {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-4 mt-5 mb-20">
+        {/* <div className="flex flex-col gap-4 mt-5 mb-20">
           <AudioPlayer
             src={
               "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
@@ -87,7 +87,7 @@ export default function Page({ params }: { params: { postId: string } }) {
               "https://cdn.masaf.ir/contents/media/audio/Ostad_Raefipour_Iran_Parcham_Dar_Yegane_Parasti_Dar_Donya_1402_06_2_4tblp5D.mp3"
             }
           />
-        </div>
+        </div> */}
         <div className="flex gap-4 items-center font-IRANSansWeb px-5">
           <hr className="w-full" />
           <div className="whitespace-nowrap">آیا این مطلب را دوست داشتید؟</div>

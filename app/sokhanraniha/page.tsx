@@ -57,7 +57,7 @@ function page() {
     console.log(session?.user.id)
     getPosts();
   }, []);
-
+  
   // Send request to server whenever selectedCategories change
   useEffect(() => {
     // Make your API request here using selectedCategories
