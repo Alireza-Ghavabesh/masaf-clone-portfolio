@@ -78,6 +78,7 @@ function page({ params }: { params: { postId: string } }) {
     }).then(createLocalComment);
   }
 
+
   function onAddToFavorites() {
     setIsFavorited((prevIsFavorite) => !prevIsFavorite)
     addToFavoritePostFn.execute({ postId: post.id, userId: session?.user.id })
@@ -223,6 +224,7 @@ function page({ params }: { params: { postId: string } }) {
             loading={loading}
             error={error}
             onSubmit={onCommentCreate}
+            authStatus={status}
           />
 
           <div className="flex flex-col">
@@ -239,7 +241,7 @@ function page({ params }: { params: { postId: string } }) {
               <div className="mt-4"></div>
               {rootComments != null && rootComments.length > 0 && (
                 <div className="mt-4">
-                  <CommentList comments={rootComments} />
+                  <CommentList comments={rootComments} authStatus={status} />
                 </div>
               )}
             </section>

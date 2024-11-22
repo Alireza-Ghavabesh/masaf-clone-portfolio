@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { Bounce, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export function CommentForm({
   loading,
@@ -6,12 +9,32 @@ export function CommentForm({
   onSubmit,
   autoFocus = false,
   initialValue = "",
+  authStatus,
 }) {
   const [message, setMessage] = useState(initialValue);
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSubmit(message).then(() => setMessage(""));
+    if (authStatus === 'authenticated') {
+      onSubmit(message).then(() => setMessage(""));
+    } else {
+
+      toast.error("لطفا وارد حساب کاربری شوید", {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+        style: {
+          fontFamily: "IranYekanWebBold",
+          textAlign: "right",
+        },
+      });
+    }
   }
 
   return (

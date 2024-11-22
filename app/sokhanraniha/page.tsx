@@ -341,7 +341,7 @@ function page() {
             {posts.length > 0 &&
               posts.map((post, postIndex) => (
                 <GridSingleVideo
-                  src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
+                  src={`http://localhost:8000/stream/thumbnail/${post.postThumbnail}`}
                   href={`/content/${post.id}`}
                   desc={post.content}
                   date={post.jalaliDate}

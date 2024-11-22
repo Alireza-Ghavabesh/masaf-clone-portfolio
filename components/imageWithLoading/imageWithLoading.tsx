@@ -8,6 +8,7 @@ async function ImageWithLoading({
   height,
   loadingTime,
   className,
+  loading,
 }: {
   src: string;
   alt: string;
@@ -15,6 +16,7 @@ async function ImageWithLoading({
   height: number;
   loadingTime?: number;
   className?: string;
+  loading?: "lazy" | "eager" | undefined;
 }) {
   if (loadingTime) {
     // await delaySimulator(loadingTime);
@@ -27,6 +29,7 @@ async function ImageWithLoading({
         width={width}
         height={height}
         className={`${className}`}
+        loading={loading}
       />
     </>
   );

@@ -9,6 +9,13 @@ config.autoAddCss = false;
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
+
+
+
 export const metadata: Metadata = {
   title: "موسسه مصاف ایرانیان",
   description: "",
@@ -21,14 +28,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+
       <SessionWrapper>
         <body className="bg-[#F8F8F6] flex flex-col min-h-screen">
-        <ToastContainer />
+          <ToastContainer />
           <Header />
-          <div className="flex-grow py-4">{children}</div>
+          <div className="flex-grow py-4">
+            <AppRouterCacheProvider>
+              <ThemeProvider theme={theme}>
+                {children}
+              </ThemeProvider>
+            </AppRouterCacheProvider>
+          </div>
           <Footer />
         </body>
       </SessionWrapper>
+
+
     </html>
   );
 }

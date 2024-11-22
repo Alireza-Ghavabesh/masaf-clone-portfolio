@@ -22,6 +22,7 @@ import twiitha from "@/public/svgs/header/navbarIcons/twiitha.svg";
 import etelaResani from "@/public/svgs/header/navbarIcons/etelaResani.svg";
 import darbarema from "@/public/svgs/header/navbarIcons/darbarema.svg";
 import vahedha from "@/public/svgs/header/navbarIcons/vahedha.svg";
+import { useRouter } from "next/navigation";
 
 function Header() {
   const { data: session, status } = useSession();
@@ -30,6 +31,8 @@ function Header() {
   const toggleHidden = () => {
     setIsHidden(!isHidden);
   };
+
+  const router = useRouter()
 
   return (
     <header className="bg-white font-IranYekanWebBold">
@@ -91,9 +94,8 @@ function Header() {
           )}
           <ul
             dir="rtl"
-            className={`${
-              isHidden ? "-right-full" : "right-0"
-            } top-0 z-[999] fixed w-9/12 h-screen bg-white transition-all duration-300 ease-in-out
+            className={`${isHidden ? "-right-full" : "right-0"
+              } top-0 z-[999] fixed w-9/12 h-screen bg-white transition-all duration-300 ease-in-out
             p-5 flex flex-col border-l-4`}
           >
             <li className="flex justify-between">
@@ -212,7 +214,9 @@ function Header() {
 
             <div className="flex gap-2">
               <Search />
-              <Image src={MasafLogo} alt="" width={137} height={47} />
+              <Image className="cursor-pointer" src={MasafLogo} alt="" width={137} height={47} onClick={() => {
+                router.push("/")
+              }} />
             </div>
           </div>
 

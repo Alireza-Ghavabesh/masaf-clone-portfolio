@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import GridSingleVideo from "@/components/singleVideo/gridSingleVideo";
 
 export type postStateType = {
+  postThumbnail: string;
   id: number;
   title: string;
   content: string;

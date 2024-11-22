@@ -14,6 +14,7 @@ import {
 } from "@/components/imageWithLoading/skeleton";
 import { ThreeSkeleton } from "@/components/skeletons/threeSkeleton";
 import { randomUUID } from "crypto";
+import Link from "next/link";
 
 const page = () => {
   return (
@@ -26,7 +27,21 @@ const page = () => {
           <Suspense fallback={<ThreeSkeleton />}>
             <ImageWithLoading
               src={
-                "https://cdn.masaf.ir/survey/2ab6d759-c01e-4f8a-866c-238963b6d2dd_La"
+                "http://localhost:8000/stream/serveBottomLeftSiteBanner"
+              }
+              alt=""
+              width={400}
+              height={500}
+              className="rounded-2xl mt-10 lg:w-1/3 h-auto lg:pr-3 mx-auto"
+              loadingTime={4000}
+              loading="eager"
+            />
+          </Suspense>
+
+          <Suspense fallback={<ThreeSkeleton />}>
+            <ImageWithLoading
+              src={
+                "http://localhost:8000/stream/serveMidSiteBanner"
               }
               alt=""
               width={400}
@@ -39,20 +54,7 @@ const page = () => {
           <Suspense fallback={<ThreeSkeleton />}>
             <ImageWithLoading
               src={
-                "https://cdn.masaf.ir/survey/5dd0ac3a-9d3c-4f0c-b84a-209652d4b864_1%20"
-              }
-              alt=""
-              width={400}
-              height={500}
-              className="rounded-2xl mt-10 lg:w-1/3 h-auto lg:pr-3 mx-auto"
-              loadingTime={4000}
-            />
-          </Suspense>
-
-          <Suspense fallback={<ThreeSkeleton />}>
-            <ImageWithLoading
-              src={
-                "https://cdn.masaf.ir/survey/078a9420-b040-49b7-b281-374ac93aaaa1_3-"
+                "http://localhost:8000/stream/serveBottomRightSiteBanner"
               }
               alt=""
               width={400}
@@ -74,16 +76,16 @@ const page = () => {
                 <button className="border rounded-lg p-2">
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
-                <button className="flex items-center p-2 border font-IRANSansWeb border-gray-300 rounded-lg">
+                <Link href={"/sokhanraniha"} className="flex items-center font-IRANSansWeb p-2 border border-gray-300 rounded-lg">
                   بیشتر
-                </button>
+                </Link>
               </div>
               <div className="flex items-center font-IRANSansWeb font-bold">
                 جدیدترین سخنرانی ها
               </div>
             </div>
             <hr />
-            <MiddleSlider />
+            <MiddleSlider category="سخنرانی" limit="6" />
           </div>
           <div className="bg-white mt-2 p-4 flex flex-col gap-4">
             <div className="flex justify-between">
@@ -94,16 +96,16 @@ const page = () => {
                 <button className="border rounded-lg p-2">
                   <FontAwesomeIcon icon={faArrowRight} />
                 </button>
-                <button className="flex items-center font-IRANSansWeb p-2 border border-gray-300 rounded-lg">
+                <Link href={"/clipha"} className="flex items-center font-IRANSansWeb p-2 border border-gray-300 rounded-lg">
                   بیشتر
-                </button>
+                </Link>
               </div>
               <div className="flex items-center font-IRANSansWeb font-bold">
                 جدیدترین کلیپ ها
               </div>
             </div>
             <hr />
-            <MiddleSlider />
+            <MiddleSlider category="کلیپ" limit="6" />
           </div>
         </div>
       </section>
@@ -152,7 +154,7 @@ const page = () => {
               </div>
             </div>
             <hr />
-            <MiddleSlider />
+            <MiddleSlider category="برگزیده" limit="6" />
           </div>
         </div>
       </section>

@@ -5,8 +5,33 @@ import SingleVideo from "../../singleVideo/singleVideo";
 
 // Import Swiper styles
 import "swiper/css";
+import { useEffect, useState } from "react";
+import { postStateType } from "@/app/dashboard/myPosts/[userId]/page";
 
-function MiddleSlider() {
+function MiddleSlider({ category, limit }: { category: string, limit: string }) {
+  const [posts, setPosts] = useState<postStateType[]>([]);
+  useEffect(() => {
+    async function getPosts() {
+      const fd = new FormData();
+
+      fd.append(`categories[0]`, category);
+      fd.append('limit', limit);
+      
+
+      const res = await fetch("http://localhost:8000/api/getPost", {
+        body: fd,
+        method: "POST",
+      });
+
+      const posts = await res.json();
+      setPosts(() => posts)
+      console.log(`posts middleslider:`);
+      console.log(posts)
+    }
+
+
+    getPosts();
+  }, []);
   return (
     <div className="container mx-auto">
       <Swiper
@@ -40,76 +65,19 @@ function MiddleSlider() {
           },
         }}
       >
-        <SwiperSlide>
-          <SingleVideo
-            src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
-            href="/content/10"
-            desc={
-              "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
-            }
-            date={"1402/08/03"}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SingleVideo
-            src={
-              "https://cdn.masaf.ir/survey/f23f4970-0f2f-49d9-b2a4-5e1e9d7f2504_SL"
-            }
-            href="/content/10"
-            desc={
-              "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
-            }
-            date={"1402/08/03"}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SingleVideo
-            src={
-              "https://cdn.masaf.ir/contents/media/coverImage/%DA%A9%D8%A7%D9%88%D8%B1_%D9%85%D8%B1%D8%A7%D8%B3%D9%85_%D8%AF%D8%B9%D8%A7%DB%8C_%D9%86%D8%AF%D8%A8%D9%87_35.jpg"
-            }
-            date={"1402/08/03"}
-            href="/content/10"
-            desc={
-              "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
-            }
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SingleVideo
-            src={
-              "https://cdn.masaf.ir/survey/f23f4970-0f2f-49d9-b2a4-5e1e9d7f2504_SL"
-            }
-            date={"1402/08/03"}
-            href="/content/10"
-            desc={
-              "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
-            }
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SingleVideo
-            src={
-              "https://cdn.masaf.ir/survey/f23f4970-0f2f-49d9-b2a4-5e1e9d7f2504_SL"
-            }
-            date={"1402/08/03"}
-            href="/content/10"
-            desc={
-              "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
-            }
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <SingleVideo
-            src={
-              "https://cdn.masaf.ir/survey/f23f4970-0f2f-49d9-b2a4-5e1e9d7f2504_SL"
-            }
-            date={"1402/08/03"}
-            desc={
-              "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
-            }
-            href="/content/10"
-          />
-        </SwiperSlide>
+        {posts.map(post => (
+          <SwiperSlide>
+            <SingleVideo
+              src={`http://localhost:8000/stream/thumbnail/${post.postThumbnail}`}
+              href={`/content/${post.id}`}
+              desc={
+                post.content
+              }
+              date={post.jalaliDate}
+            />
+          </SwiperSlide>
+        ))}
+
       </Swiper>
     </div>
   );

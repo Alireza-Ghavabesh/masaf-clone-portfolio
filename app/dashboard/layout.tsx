@@ -42,6 +42,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                 <Link className="block p-3 rounded hover:bg-gray-200 font-IranYekanWebBold" href={`/dashboard/myPosts/${session.user.id}`}>
                   پست های من
                 </Link>
+                <Link className="block p-3 rounded hover:bg-gray-200 font-IranYekanWebBold" href={`/dashboard/updateSiteContent`}>
+                  بروزرسانی محتوای سایت
+                </Link>
               </>
             )}
           </ul>

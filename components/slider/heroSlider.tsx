@@ -19,7 +19,9 @@ async function HeroSlider() {
       >
         <SwiperSlide>
           <Image
-            src={heroImage}
+            // src={heroImage}
+            loading="eager"
+            src={"http://localhost:8000/stream/serveSiteBanner"}
             alt=""
             width={9000}
             height={500}

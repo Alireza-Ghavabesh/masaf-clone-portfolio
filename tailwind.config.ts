@@ -1,10 +1,12 @@
 const withMT = require("@material-tailwind/html/utils/withMT");
 
+
 const config = withMT({
   content: [
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{ts,tsx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {
@@ -23,6 +25,5 @@ const config = withMT({
       },
     },
   },
-  plugins: [],
 });
 export default config;

@@ -47,6 +47,7 @@ function UploadVideo() {
 
   // Define the initial state based on your ZodSchema
   const [formData, setFormData] = useState<{
+    postThumbnail: File | null;
     title: string;
     content: string;
     category: string;
@@ -63,6 +64,7 @@ function UploadVideo() {
     category: "",
     videos: [],
     images: [],
+    postThumbnail: null,
   });
 
   const onSubmit = async (data: FormFields) => {
@@ -73,6 +75,7 @@ function UploadVideo() {
     fd.append("title", data.title);
     fd.append("content", data.content);
     fd.append("category", formData.category);
+    fd.append("postThumbnail", formData.postThumbnail as any)
 
     console.log(data.title);
     console.log(data.content);
@@ -196,13 +199,44 @@ function UploadVideo() {
         className="border-2 outline-none px-2 rounded-lg h-64"
         {...register("content")}
       />
+
+      <div
+        key={`thumbnail-post`}
+        className="flex gap-2 items-center border-t border-b px-2 hover:bg-lime-200 cursor-pointer"
+      >
+        <FontAwesomeIcon
+          icon={faPlusSquare}
+          size="2xl"
+          onClick={() => { }}
+        />
+        <div className="flex flex-col gap-2 w-full">
+          <div className="cursor-pointer p-2 rounded-lg relative ">
+            <div className="">عکس روی پست</div>
+            <input
+              type="file"
+              onInput={(e: any) => {
+                const file = e.target.files[0];
+                setFormData((prevData) => {
+                  return {
+                    ...prevData,
+                    postThumbnail: file,
+                  };
+                });
+              }}
+              className="absolute opacity-0 w-full top-0 h-full"
+            />
+          </div>
+        </div>
+
+      </div>
+
       <select name="select" key={"select_key"} id="select_id" title="choose_category" onChange={(e) => {
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            category: e.target.value,
-          }));
-          console.log(e.target.value);
-        }}
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          category: e.target.value,
+        }));
+        console.log(e.target.value);
+      }}
       >
         <option key={"option"} value="">
           انتخاب دسته

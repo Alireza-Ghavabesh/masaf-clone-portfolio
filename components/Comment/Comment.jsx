@@ -19,7 +19,7 @@ const dateFormater = new Intl.DateTimeFormat(undefined, {
   timeStyle: "short",
 });
 
-export function Comment({ id, text, user, createdAt, likeCount, likedByMe }) {
+export function Comment({ id, text, user, createdAt, likeCount, likedByMe, authStatus }) {
   const { data: session, status } = useSession();
   const [areChildrenHidden, setAreChildrenHidden] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
@@ -104,6 +104,7 @@ export function Comment({ id, text, user, createdAt, likeCount, likedByMe }) {
             onSubmit={onCommentUpdate}
             loading={updateCommentFn.loading}
             error={updateCommentFn.error}
+            authStatus={authStatus}
           />
         ) : (
           <div className="message">{text}</div>
@@ -155,6 +156,7 @@ export function Comment({ id, text, user, createdAt, likeCount, likedByMe }) {
             onSubmit={onCommentReply}
             loading={createCommentFn.loading}
             error={createCommentFn.error}
+            authStatus={authStatus}
           />
         </div>
       )}
@@ -173,7 +175,7 @@ export function Comment({ id, text, user, createdAt, likeCount, likedByMe }) {
               onClick={() => setAreChildrenHidden(true)}
             />
             <div className="nested-comments" dir="rtl">
-              <CommentList comments={childComments} />
+              <CommentList comments={childComments} authStatus={authStatus} />
             </div>
           </div>
           <button
