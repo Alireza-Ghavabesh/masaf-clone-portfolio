@@ -139,7 +139,7 @@ function GridSingleVideo(props: GridSingleVideoProps) {
               {convertToPersianNumbers(props.date)}
               <FontAwesomeIcon icon={faCalendarAlt} size="xl" />
             </div>
-            <div>{props.category}</div>
+            <div className="font-bold">{props.category}</div>
           </div>
         </div>
       </div>

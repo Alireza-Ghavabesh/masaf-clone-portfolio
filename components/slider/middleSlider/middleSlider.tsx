@@ -74,6 +74,7 @@ function MiddleSlider({ category, limit }: { category: string, limit: string }) 
                 post.content
               }
               date={post.jalaliDate}
+              title={post.title}
             />
           </SwiperSlide>
         ))}

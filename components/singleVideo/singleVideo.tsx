@@ -16,6 +16,7 @@ type props = {
   src: string;
   desc: string;
   date: string;
+  title: string;
 };
 
 function SkeletonLoader() {
@@ -82,8 +83,11 @@ function SingleVideo(props: props) {
       </div>
       <div className="flex flex-col gap-10">
         <div className="font-IRANSansWeb font-bold flex gap-3">
-          <p className="text-right">{props.desc}</p>
-          <FontAwesomeIcon icon={faFilm} size="xl" />
+          <div className="flex justify-between gap-2 w-full">
+            <p className="text-right">{props.title}</p>
+            <FontAwesomeIcon icon={faFilm} size="xl" />
+          </div>
+
         </div>
         <div className="flex justify-between font-IRANSansWeb px-1">
           <div>سخنرانی</div>
