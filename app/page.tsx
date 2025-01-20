@@ -15,6 +15,7 @@ import {
 import { ThreeSkeleton } from "@/components/skeletons/threeSkeleton";
 import { randomUUID } from "crypto";
 import Link from "next/link";
+import { getNestjsServerAdress } from "@/utils/utils";
 
 const page = () => {
   return (
@@ -27,7 +28,7 @@ const page = () => {
           <Suspense fallback={<ThreeSkeleton />}>
             <ImageWithLoading
               src={
-                "http://localhost:8000/stream/serveBottomLeftSiteBanner"
+                `${getNestjsServerAdress()}/stream/serveBottomLeftSiteBanner`
               }
               alt=""
               width={400}
@@ -41,7 +42,7 @@ const page = () => {
           <Suspense fallback={<ThreeSkeleton />}>
             <ImageWithLoading
               src={
-                "http://localhost:8000/stream/serveMidSiteBanner"
+                `${getNestjsServerAdress()}/stream/serveMidSiteBanner`
               }
               alt=""
               width={400}
@@ -54,7 +55,7 @@ const page = () => {
           <Suspense fallback={<ThreeSkeleton />}>
             <ImageWithLoading
               src={
-                "http://localhost:8000/stream/serveBottomRightSiteBanner"
+                `${getNestjsServerAdress()}/stream/serveBottomRightSiteBanner`
               }
               alt=""
               width={400}

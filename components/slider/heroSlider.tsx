@@ -5,7 +5,7 @@ import heroImage from "@/public/hero.webp";
 
 // Import Swiper styles
 import "swiper/css";
-import { delaySimulator } from "@/utils/utils";
+import { delaySimulator, getNestjsServerAdress } from "@/utils/utils";
 
 async function HeroSlider() {
   // await delaySimulator(5000);
@@ -21,7 +21,7 @@ async function HeroSlider() {
           <Image
             // src={heroImage}
             loading="eager"
-            src={"http://localhost:8000/stream/serveSiteBanner"}
+            src={`${getNestjsServerAdress()}/stream/serveSiteBanner`}
             alt=""
             width={9000}
             height={500}

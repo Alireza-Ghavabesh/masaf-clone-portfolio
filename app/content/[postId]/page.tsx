@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import imageMasaf from "@/public/jpgs/masaf.jpg";
-import { convertToPersianNumbers } from "@/utils/utils";
+import { convertToPersianNumbers, getNestjsServerAdress } from "@/utils/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import downloadIcon from "@/public/svgs/content/download.svg";
@@ -47,8 +47,8 @@ function page({ params }: { params: { postId: string } }) {
 
   const imageList = post.images.map((image: any) => {
     return {
-      original: `http://localhost:8000/stream/gallery/${image.url}`,
-      thumbnail: `http://localhost:8000/stream/gallery/${image.url}`,
+      original: `${getNestjsServerAdress()}/stream/gallery/${image.url}`,
+      thumbnail: `${getNestjsServerAdress()}/stream/gallery/${image.url}`,
     }
   });
 
@@ -94,7 +94,11 @@ function page({ params }: { params: { postId: string } }) {
       });
   };
 
-
+  const galleryRef = useRef<ImageGallery>(null); const handleImageClick = () => {
+    if (galleryRef.current) {
+      galleryRef.current.fullScreen();
+    }
+  };
 
 
   return (
@@ -147,11 +151,11 @@ function page({ params }: { params: { postId: string } }) {
                 controls
                 preload="none"
                 className="w-full px-5 mb-5"
-                poster={`http://localhost:8000/stream/thumbnail/${video.thumbnail}`}
+                poster={`${getNestjsServerAdress()}/stream/thumbnail/${video.thumbnail}`}
               >
                 <source
                   // src="https://cdn.masaf.ir/contents/media/video/Iran_Parcham_1080.mp4"
-                  src={`http://localhost:8000/stream/video/${video.url.replace(".mp4", "")}`}
+                  src={`${getNestjsServerAdress()}/stream/video/${video.url.replace(".mp4", "")}`}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
@@ -174,11 +178,11 @@ function page({ params }: { params: { postId: string } }) {
                 {video.audios.length > 0 && video.audios.map((audio: any) => (
                   <>
                     {/* <audio controls preload="none" className="w-full px-5 mb-5">
-                      <source src={`http://localhost:8000/stream/audio/${audio.url}`} type="audio/mp3" />
+                      <source src={`${getNestjsServerAdress()}/stream/audio/${audio.url}`} type="audio/mp3" />
                       Your browser does not support the audio element.
                     </audio> */}
                     <div className="px-4 cursor-pointer" dir="ltr">
-                      <Player src={`http://localhost:8000/stream/audio/${audio.url.replace(".mp3", "")}`} height={40} />
+                      <Player src={`${getNestjsServerAdress()}/stream/audio/${audio.url.replace(".mp3", "")}`} height={40} />
                     </div>
 
                   </>
@@ -189,14 +193,21 @@ function page({ params }: { params: { postId: string } }) {
         </div>
 
 
-        <div className="flex gap-4 items-center font-IRANSansWeb px-5">
+        <div className="w-full px-2 text-justify">{post.content}</div>
+
+
+        <div className="border">
+          <div className="px-4">
+            <ImageGallery ref={galleryRef} showPlayButton={false} showThumbnails={false} showFullscreenButton={false} items={imageList} onClick={handleImageClick} />
+          </div>
+        </div>
+
+
+
+        <div className="flex gap-4 items-center font-IRANSansWeb px-5 mt-5">
           <hr className="w-full" />
           <div className="whitespace-nowrap">آیا این مطلب را دوست داشتید؟</div>
           <hr className="w-full" />
-        </div>
-
-        <div className="px-4">
-          <ImageGallery showPlayButton={false} showFullscreenButton={false} items={imageList} />
         </div>
 
         <div className="py-9 text-center">

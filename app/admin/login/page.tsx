@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { Bounce, toast } from "react-toastify";
 import { signIn } from "next-auth/react";
-import { validateEmail, validatePhoneNumber } from "@/utils/utils";
+import { getNextjsServerAdress, validateEmail, validatePhoneNumber } from "@/utils/utils";
 
 export default function AdminLoginPage() {
   const [loginState, setLoginState] = useState("email");
@@ -158,9 +158,9 @@ export default function AdminLoginPage() {
           firstName: responseLogin.data.firstName,
           lastName: responseLogin.data.lastName,
           redirect: true,
-          callbackUrl: `http://localhost:3000`,
+          callbackUrl: `${getNextjsServerAdress()}`,
         });
-
+        
         try {
           await signIn("credentials", {
             email: email,
@@ -170,7 +170,7 @@ export default function AdminLoginPage() {
             lastName: responseLogin.data.lastName,
             isAdmin: true,
             redirect: true,
-            callbackUrl: `http://localhost:3000/dashboard/etelaatkarbari`,
+            callbackUrl: `${getNextjsServerAdress()}/dashboard/etelaatkarbari`,
           });
         } catch (err) {
           console.log(err);
@@ -180,7 +180,7 @@ export default function AdminLoginPage() {
       console.log(
         `start process of one time code with ${email}:${oneTimeCode}`
       );
-      // const res = await fetch('http://localhost:3000/api/login', {
+      // const res = await fetch(`${getNestjsServerAdress()}/api/login`, {
       //     method: 'POST',
       //     headers: { 'Content-Type': 'application/json' },
       //     body: JSON.stringify({

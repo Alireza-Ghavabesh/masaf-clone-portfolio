@@ -8,8 +8,10 @@ import {
   faPlusSquare,
   faImages,
   faRemove,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import { useSession } from "next-auth/react";
+import { getNestjsServerAdress } from "@/utils/utils";
 
 const AudioSchema = z.object({
   file: z.unknown(), // Use 'unknown' type for File objects
@@ -37,6 +39,13 @@ const categorys = [
   "اطلاع رسانی",
 ];
 
+const tags = [
+  "دشمن شناسی",
+  "سیاسی",
+  "رسانه",
+  "روایت عهد",
+]
+
 type FormFields = z.infer<typeof ZodSchema>;
 
 function UploadVideo() {
@@ -58,6 +67,7 @@ function UploadVideo() {
     }[]
     | null;
     images: FileList[] | null;
+    tags: string[]
   }>({
     title: "",
     content: "",
@@ -65,7 +75,10 @@ function UploadVideo() {
     videos: [],
     images: [],
     postThumbnail: null,
+    tags: []
   });
+
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
 
   const onSubmit = async (data: FormFields) => {
     setIsSubmiting(() => true);
@@ -107,11 +120,17 @@ function UploadVideo() {
       });
     }
 
+    if (formData.tags) {
+      formData.tags.map((tag, index) => {
+        fd.append(`tags[${index}]`, tag as string)
+      })
+    }
+
     console.log(formData.videos?.forEach(video => {
       console.log(video.thumbnail)
     }))
 
-    const response = await fetch(`http://localhost:8000/api/post`, {
+    const response = await fetch(`${getNestjsServerAdress()}/api/post`, {
       method: "POST",
       body: fd,
       cache: "no-cache", // Optional for caching control,
@@ -207,8 +226,10 @@ function UploadVideo() {
         <FontAwesomeIcon
           icon={faPlusSquare}
           size="2xl"
-          onClick={() => { }}
+
         />
+
+
         <div className="flex flex-col gap-2 w-full">
           <div className="cursor-pointer p-2 rounded-lg relative ">
             <div className="">عکس روی پست</div>
@@ -238,8 +259,8 @@ function UploadVideo() {
         console.log(e.target.value);
       }}
       >
-        <option key={"option"} value="">
-          انتخاب دسته
+        <option key={"option"} value="" disabled selected>
+          -- دسته انتخاب کنید --
         </option>
         {categorys.map((category, indexCategory) => (
           <option key={indexCategory} value={category}>
@@ -247,6 +268,61 @@ function UploadVideo() {
           </option>
         ))}
       </select>
+
+      <select name="select" key={"select_key"} id="select_id" title="choose_category" onChange={(e) => {
+        setFormData((prevData) => {
+          const updatedTags = [...prevData.tags];
+          if (!updatedTags.includes(e.target.value)) {
+            return {
+              ...prevData,
+              tags: [...updatedTags, e.target.value]
+            }
+          } else {
+            return {
+              ...prevData,
+              tags: [...updatedTags]
+            }
+          }
+        });
+      }}
+      >
+        <option key={"option"} value="" disabled selected>
+          -- برچسب انتخاب کنید --
+        </option>
+        {tags.map((tag, indexTag) => (
+          <option key={indexTag} value={tag}>
+            {tag}
+          </option>
+        ))}
+      </select>
+
+      <div className="w-full border flex gap-2 justify-end">
+        {formData.tags.map((selectedTag, tagIndex) => (
+          <div className="flex gap-1 border items-center border-zomorod rounded-lg p-1 cursor-pointer" onClick={() => {
+            setFormData((prevData) => {
+              const updatedTags = [...prevData.tags];
+
+              updatedTags.splice(tagIndex, 1);
+
+              return {
+                ...prevData,
+                tags: updatedTags,
+              };
+            });
+            setSelectedTags((prevTags) =>
+              prevTags.filter((prevTag) => prevTag !== selectedTag)
+            );
+          }}>
+            <FontAwesomeIcon
+              className=""
+              icon={faTrash}
+              size="xs"
+              onClick={() => { }}
+            />
+            <div>{selectedTag}</div>
+          </div>
+        ))}
+      </div>
 
       <div
         onClick={handleAddNewVideoInput}
@@ -432,6 +508,7 @@ function UploadVideo() {
               }}
             />
           </div>
+
         </div>
       </div>
       <input

@@ -7,6 +7,7 @@ import SingleVideo from "../../singleVideo/singleVideo";
 import "swiper/css";
 import { useEffect, useState } from "react";
 import { postStateType } from "@/app/dashboard/myPosts/[userId]/page";
+import { getNestjsServerAdress } from "@/utils/utils";
 
 function MiddleSlider({ category, limit }: { category: string, limit: string }) {
   const [posts, setPosts] = useState<postStateType[]>([]);
@@ -18,7 +19,7 @@ function MiddleSlider({ category, limit }: { category: string, limit: string }) 
       fd.append('limit', limit);
       
 
-      const res = await fetch("http://localhost:8000/api/getPost", {
+      const res = await fetch(`${getNestjsServerAdress()}/api/getPost`, {
         body: fd,
         method: "POST",
       });
@@ -68,7 +69,7 @@ function MiddleSlider({ category, limit }: { category: string, limit: string }) 
         {posts.map(post => (
           <SwiperSlide>
             <SingleVideo
-              src={`http://localhost:8000/stream/thumbnail/${post.postThumbnail}`}
+              src={`${getNestjsServerAdress()}/stream/thumbnail/${post.postThumbnail}`}
               href={`/content/${post.id}`}
               desc={
                 post.content

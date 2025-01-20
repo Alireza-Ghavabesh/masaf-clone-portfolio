@@ -1,124 +1,178 @@
 "use client";
 import { faSearch, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import filterIcon from "@/public/svgs/main/filter.svg";
 import Image from "next/image";
 import GridSingleVideo from "@/components/singleVideo/gridSingleVideo";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { postStateType } from "../dashboard/myPosts/[userId]/page";
+// import { postStateType } from "../dashboard/myPosts/[userId]/page";
+import { getNestjsServerAdress } from "@/utils/utils";
+import { postType } from "@/components.types";
 
 function page() {
-  const [posts, setPosts] = useState<postStateType[]>([]);
+
+  const cursorRef = useRef(null);
+  const limitRef = useRef(9);
+  const [isLoading, setIsloading] = useState(false)
+  const [posts, setPosts] = useState<postType[]>([]);
   const { data: session, status } = useSession();
-  const [isFirstRender, setIsFirstRender] = useState(true);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [orderBy, setOrderBy] = useState<"mostPopular" | "oldest" | "newest">(
-    "mostPopular"
+    "oldest"
   );
   const [searchTerm, setSearchTerm] = useState<string>("");
 
+  const [fromDate, setFromDate] = useState<string>("")
+  const [toDate, setToDate] = useState<string>("")
+
+
+  const fetchPosts = async (url: string, filter: {
+    cursor?: string, limit?: string, tags?: string[], orderBy?: string, searchTerm?: string, isForNextPart: boolean, category: string,
+    filterFromDate?: string, filterToDate?: string,
+  }) => {
+    setIsloading(true);
+    try {
+      // await new Promise(res => setTimeout(res, 1000))
+
+      const fd = new FormData();
+
+      if (filter.tags) {
+        if (filter.tags.length > 0) {
+          filter.tags.forEach((tag, tagIndex) => {
+            fd.append(`tags[${tagIndex}]`, tag);
+          });
+        }
+      }
+
+      if (filter.orderBy) {
+        fd.append("orderBy", orderBy);
+      }
+      if (searchTerm) {
+        fd.append("searchTerm", searchTerm);
+      }
+
+      if (filter.limit) {
+        fd.append("limit", JSON.stringify(limitRef.current))
+      }
+
+      if (filter.cursor) {
+        fd.append("cursor", JSON.stringify(cursorRef.current))
+      }
+
+      if (filter.category) {
+        fd.append('category', filter.category)
+      }
+
+
+      const response = await fetch(url, {
+        method: "POST",
+        body: fd
+      });
+      const data = await response.json();
+
+      console.log(`<the response data for ${selectedTags.length > 0 ? selectedTags[0] : ""}:`)
+      console.log(data)
+      console.log("<the response data>:")
+
+
+
+      if (filter.isForNextPart) {
+        setPosts(prevPosts => [...prevPosts, ...data]);
+      } else {
+        setPosts(() => [...data]);
+      }
+
+
+
+      // Update the cursor to the ID of the last fetched post
+      if (data.length > 0) {
+        cursorRef.current = data[data.length - 1].id;
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsloading(false);
+    }
+
+  };
+
+
+
   // Handle checkbox changes
   const changeFilter = (event: any) => {
-    const categoryName = event.target.name;
+    const tagName = event.target.name;
     if (event.target.checked) {
-      setSelectedCategories((prevCategories) => [
-        ...prevCategories,
-        categoryName,
+      setSelectedTags((prevTags) => [
+        ...prevTags,
+        tagName,
       ]);
     } else {
-      setSelectedCategories((prevCategories) =>
-        prevCategories.filter((category) => category !== categoryName)
+      setSelectedTags((prevTags) =>
+        prevTags.filter((tag) => tag !== tagName)
       );
     }
   };
 
-  // Send request to server whenever selectedCategories change
+  const postRef = useCallback((post: any) => {
+    if (post == null) return
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        // TODO: load next posts
+        fetchPosts(`${getNestjsServerAdress()}/api/postsByCursor`, {
+          cursor: JSON.stringify(cursorRef.current),
+          limit: JSON.stringify(limitRef.current),
+          orderBy: orderBy,
+          isForNextPart: true,
+          tags: selectedTags,
+          searchTerm: searchTerm,
+          category: 'سخنرانی',
+          filterFromDate: fromDate,
+          filterToDate: toDate
+        });
+        console.log("last post shown")
+        observer.unobserve(post)
+      }
+    })
+    observer.observe(post)
+  }, [cursorRef.current, selectedTags, searchTerm, limitRef.current, fromDate, toDate])
+
+
+  // Send request to server whenever filters change
   useEffect(() => {
-    // Make your API request here using selectedCategories
-    // Example: fetchPosts(selectedCategories);
+    console.log(`selectedTags================`)
+    console.log(selectedTags)
+    console.log(`selectedTags================`)
 
-    async function getPosts() {
-      const fd = new FormData();
+    fetchPosts(`${getNestjsServerAdress()}/api/postsByCursor`, {
+      limit: JSON.stringify(limitRef.current),
+      isForNextPart: false,
+      orderBy: orderBy,
+      tags: selectedTags.length > 0 ? selectedTags : [],
+      searchTerm: searchTerm,
+      category: 'سخنرانی',
+      filterFromDate: fromDate,
+      filterToDate: toDate
+    })
 
-      fd.append(`categories[0]`, "سخنرانی");
+    console.log(selectedTags)
 
-      const res = await fetch("http://localhost:8000/api/getPost", {
-        body: fd,
-        method: "POST",
-      });
+  }, [orderBy, selectedTags, searchTerm, limitRef.current, fromDate, toDate]);
 
-      const posts = await res.json();
-      setPosts(() => posts)
-      console.log(posts);
-    }
 
-    console.log(session?.user.id)
-    getPosts();
-  }, []);
-  
-  // Send request to server whenever selectedCategories change
-  useEffect(() => {
-    // Make your API request here using selectedCategories
-    // Example: fetchPosts(selectedCategories);
-
-    async function fetchPosts() {
-      const fd = new FormData();
-
-      selectedCategories.forEach((category, categoryIndex) => {
-        fd.append(`categories[${categoryIndex}]`, category);
-      });
-
-      fd.append("orderBy", orderBy);
-      fd.append("searchTerm", searchTerm);
-
-      // console.log("Selected categories:", selectedCategories);
-      // console.log(orderBy);
-      // console.log(searchTerm);
-
-      const res = await fetch("http://localhost:8000/api/getPost", {
-        body: fd,
-        method: "POST",
-      });
-
-      const posts = await res.json();
-      setPosts(() => posts)
-      console.log(posts);
-    }
-
-    // Call the fetchPosts function whenever any of the dependencies change
-    if (!isFirstRender) {
-      fetchPosts();
-    } else {
-      setIsFirstRender(() => false);
-    }
-  }, [selectedCategories, orderBy, searchTerm]);
 
   return (
     <div className="container mx-auto px-6">
       <div className="flex lg:gap-2 lg:flex-row-reverse flex-col">
         <div className="mt-10 font-IranYekanWebBold whitespace-nowrap w-full lg:w-[30%]">
           <div className="border rounded-t-lg">
-            <div dir="rtl" className="w-full bg-white rounded-t-lg p-4">
-              <div className="text-lg">دسته بندی</div>
-            </div>
-            <hr />
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
+            <div dir="rtl" className="w-full bg-white p-4 flex gap-2 rounded-t-lg">
               <input
                 type="checkbox"
                 className="w-5"
                 onChange={changeFilter}
-                name="mostFavorite"
-              />
-              <div className="text-lg">محبوب ترین ها</div>
-            </div>
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
-              <input
-                type="checkbox"
-                className="w-5"
-                onChange={changeFilter}
-                name="ravayatAhd"
+                name="روایت عهد"
               />
               <div className="text-lg">روایت عهد ها</div>
             </div>
@@ -127,7 +181,7 @@ function page() {
                 type="checkbox"
                 className="w-5"
                 onChange={changeFilter}
-                name="ghoranVaAhlbeyt"
+                name="قرآن و اهل بیت"
               />
               <div className="text-lg">قرآن و اهل بیت</div>
             </div>
@@ -154,7 +208,7 @@ function page() {
                 type="checkbox"
                 className="w-5"
                 onChange={changeFilter}
-                name="doshmanShenasi"
+                name="دشمن شناسی"
               />
               <div className="text-lg">دشمن شناسی</div>
             </div>
@@ -172,7 +226,7 @@ function page() {
                 type="checkbox"
                 className="w-5"
                 onChange={changeFilter}
-                name="siyasi"
+                name="سیاسی"
               />
               <div className="text-lg">سیاسی</div>
             </div>
@@ -185,51 +239,7 @@ function page() {
               />
               <div className="text-lg">جلسات دعای ندبه</div>
             </div>
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
-              <input
-                type="checkbox"
-                className="w-5"
-                onChange={changeFilter}
-                name="sazemanSeriShiee"
-              />
-              <div className="text-lg">سازمان سری شیعه</div>
-            </div>
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
-              <input
-                type="checkbox"
-                className="w-5"
-                onChange={changeFilter}
-                name="tamadonSaziAshora"
-              />
-              <div className="text-lg">ظرفیت تمدن سازی عاشورا</div>
-            </div>
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
-              <input
-                type="checkbox"
-                className="w-5"
-                onChange={changeFilter}
-                name="arbaeen"
-              />
-              <div className="text-lg">زیارت اربعین</div>
-            </div>
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
-              <input
-                type="checkbox"
-                className="w-5"
-                onChange={changeFilter}
-                name="maghamatZiyaratAshora"
-              />
-              <div className="text-lg">مقامات زیارت عاشورا</div>
-            </div>
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
-              <input
-                type="checkbox"
-                className="w-5"
-                onChange={changeFilter}
-                name="jonodAghlJahl"
-              />
-              <div className="text-lg">جنود عقل و جهل</div>
-            </div>
+
             <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
               <input
                 type="checkbox"
@@ -239,23 +249,14 @@ function page() {
               />
               <div className="text-lg">خانواده و سبک زندگی</div>
             </div>
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
+            <div dir="rtl" className="w-full bg-white p-4 flex gap-2 rounded-b-lg">
               <input
                 type="checkbox"
                 className="w-5"
                 onChange={changeFilter}
-                name="chegoneGonahNakonim"
+                name="رسانه"
               />
-              <div className="text-lg">چگونه گناه نکنیم</div>
-            </div>
-            <div dir="rtl" className="w-full bg-white p-4 flex gap-2">
-              <input
-                type="checkbox"
-                className="w-5"
-                onChange={changeFilter}
-                name="resane"
-              />
-              <div className="text-lg">رسانه</div>
+              <div className="text-lg ">رسانه</div>
             </div>
           </div>
           <div className="mt-6 rounded-lg flex gap-2 items-center border p-1 bg-white">
@@ -286,7 +287,9 @@ function page() {
               <div className="flex gap-2 items-center">
                 <div>از تاریخ</div>
                 <div className="w-full flex gap-2 border rounded-lg p-2">
-                  <input type="text" className="w-full outline-none" />
+                  <input type="text" className="w-full outline-none" onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                    setFromDate(() => e.currentTarget.value)
+                  }} />
                   <FontAwesomeIcon
                     className="text-[25px] h-full bg-white mr-1"
                     icon={faCalendarAlt}
@@ -296,7 +299,9 @@ function page() {
               <div className="flex gap-2 items-center">
                 <div>تا تاریخ</div>
                 <div className="w-full flex gap-2 border rounded-lg p-2">
-                  <input type="text" className="w-full outline-none" />
+                  <input type="text" className="w-full outline-none" onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                    setToDate(() => e.currentTarget.value)
+                  }} />
                   <FontAwesomeIcon
                     className="text-[25px] h-full bg-white mr-1"
                     icon={faCalendarAlt}
@@ -317,20 +322,30 @@ function page() {
               <span className="h-8 mx-4 border border-gray-200"></span>
             </div>
             <div className="flex gap-3 flex-wrap justify-around items-center">
-              <div
-                onClick={() => setOrderBy(() => "mostPopular")}
+              {/* <div
+                onClick={
+                  () => {
+
+                    setOrderBy(() => "mostPopular")
+                  }
+                }
                 className="cursor-pointer hover:text-zomorod"
               >
                 پربازدید ترین
-              </div>
+              </div> */}
               <div
-                onClick={() => setOrderBy(() => "newest")}
+                onClick={() => {
+                  setOrderBy(() => "newest")
+                }}
                 className="cursor-pointer hover:text-zomorod"
               >
                 جدید ترین
               </div>
               <div
-                onClick={() => setOrderBy(() => "oldest")}
+                onClick={() => {
+
+                  setOrderBy(() => "oldest")
+                }}
                 className="cursor-pointer hover:text-zomorod"
               >
                 قدیمی ترین
@@ -341,18 +356,28 @@ function page() {
             {posts.length > 0 &&
               posts.map((post, postIndex) => (
                 <GridSingleVideo
-                  src={`http://localhost:8000/stream/thumbnail/${post.postThumbnail}`}
+                  key={post.id}
+                  src={`${getNestjsServerAdress()}/stream/thumbnail/${post.postThumbnail}`}
                   href={`/content/${post.id}`}
-                  desc={post.content}
+                  content={post.content}
                   date={post.jalaliDate}
                   isAdmin={session?.user.isAdmin as boolean}
                   category={post.category}
                   postId={post.id}
                   authorId={post.userId}
                   title={post.title}
+                  ref={postIndex === posts.length - 1 ? postRef : undefined}
+                  tags={[
+                    "دشمن شناسی",
+                    "سیاسی",
+                    "رسانه",
+                    "روایت عهد",
+                  ]}
                 />
               ))}
+
           </div>
+          {isLoading && <div className="w-full text-center">loading...</div>}
         </div>
       </div>
     </div>

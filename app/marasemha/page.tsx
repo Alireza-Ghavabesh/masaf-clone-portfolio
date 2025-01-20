@@ -7,10 +7,11 @@ import Image from "next/image";
 import GridSingleVideo from "@/components/singleVideo/gridSingleVideo";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { postStateType } from "../dashboard/myPosts/[userId]/page";
+import { getNestjsServerAdress } from "@/utils/utils";
+import { postType } from "@/components.types";
 
 function page() {
-  const [posts, setPosts] = useState<postStateType[]>([]);
+  const [posts, setPosts] = useState<postType[]>([]);
   const { data: session, status } = useSession();
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -53,7 +54,7 @@ function page() {
 
       fd.append(`categories[0]`, "گالری");
 
-      const res = await fetch("http://localhost:8000/api/getPost", {
+      const res = await fetch(`${getNestjsServerAdress()}/api/getPost`, {
         body: fd,
         method: "POST",
       });
@@ -66,7 +67,7 @@ function page() {
     console.log(session?.user.id)
     getPosts();
   }, []);
-  
+
   // Send request to server whenever selectedCategories change
   useEffect(() => {
     // Make your API request here using selectedCategories
@@ -86,7 +87,7 @@ function page() {
       // console.log(orderBy);
       // console.log(searchTerm);
 
-      const res = await fetch("http://localhost:8000/api/getPost", {
+      const res = await fetch(`${getNestjsServerAdress()}/api/getPost`, {
         body: fd,
         method: "POST",
       });
@@ -350,16 +351,16 @@ function page() {
             {posts.length > 0 &&
               posts.map((post, postIndex) => (
                 <GridSingleVideo
-                  src={`http://localhost:8000/stream/thumbnail/${post.postThumbnail}`}
+                  src={`${getNestjsServerAdress()}/stream/thumbnail/${post.postThumbnail}`}
                   href={`/content/${post.id}`}
-                  desc={post.content}
+                  content={post.content}
                   date={post.jalaliDate}
                   isAdmin={session?.user.isAdmin as boolean}
                   category={post.category}
                   postId={post.id}
                   authorId={post.userId}
-                  title={post.title}
-                />
+                  title={post.title} 
+                  tags={post.tags} />
               ))}
           </div>
         </div>

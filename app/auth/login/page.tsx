@@ -4,7 +4,7 @@ import masafLogo from "../../../public/svgs/auth/masafLogo.svg";
 import dashIcon from "../../../public/svgs/auth/dash.svg";
 import Image from "next/image";
 import { signIn, signOut } from "next-auth/react";
-import { validatePhoneNumber, validateEmail } from "./../../../utils/utils";
+import { validatePhoneNumber, validateEmail, getNextjsServerAdress } from "./../../../utils/utils";
 import { Bounce, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -153,7 +153,7 @@ export default function LoginPage() {
           firstName: responseLogin.data.firstName,
           lastName: responseLogin.data.lastName,
           redirect: true,
-          callbackUrl: `http://localhost:3000`,
+          callbackUrl: `${getNextjsServerAdress()}`,
         });
 
         try {
@@ -165,7 +165,7 @@ export default function LoginPage() {
             lastName: responseLogin.data.lastName,
             isAdmin: false,
             redirect: true,
-            callbackUrl: `http://localhost:3000/dashboard/etelaatkarbari`,
+            callbackUrl: `${getNextjsServerAdress()}/dashboard/etelaatkarbari`,
           });
         } catch (err) {
           console.log(err);
@@ -175,7 +175,7 @@ export default function LoginPage() {
       console.log(
         `start process of one time code with ${email}:${oneTimeCode}`
       );
-      // const res = await fetch('http://localhost:3000/api/login', {
+      // const res = await fetch(`${getNextjsServerAdress()}/api/login`, {
       //     method: 'POST',
       //     headers: { 'Content-Type': 'application/json' },
       //     body: JSON.stringify({

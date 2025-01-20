@@ -1,3 +1,4 @@
+import { getNestjsServerAdress } from '@/utils/utils';
 import { useState, useRef } from 'react';
 
 const AudioPlayer = () => {
@@ -15,7 +16,7 @@ const AudioPlayer = () => {
             });
 
             if (response.ok) {
-                const url = `http://localhost:8000/stream/audio/${filename}`;
+                const url = `${getNestjsServerAdress()}/stream/audio/${filename}`;
                 audioRef.current.src = url;
                 audioRef.current.play();
             } else {

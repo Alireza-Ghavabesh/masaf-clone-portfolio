@@ -1,7 +1,8 @@
+import { getNestjsServerAdress } from "@/utils/utils";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_RESTAPI_ADDRESS,
+  baseURL: `${getNestjsServerAdress()}/api`,
   withCredentials: true,
 });
 
