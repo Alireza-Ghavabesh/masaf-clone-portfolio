@@ -14,7 +14,7 @@ const handler = NextAuth({
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials: any, req: any) {
         const userId = credentials.userId;
         const firstName = credentials.firstName;
         const lastName = credentials.lastName;
@@ -41,7 +41,7 @@ const handler = NextAuth({
     signIn: "/auth/login", // Direct users to your custom login page
   },
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user } : any) => {
       if (user) {
         token.id = user.id;
         token.firstName = user.firstName;
@@ -51,7 +51,7 @@ const handler = NextAuth({
       }
       return token;
     },
-    session: async ({ session, token }) => {
+    session: async ({ session, token }: any) => {
       session.user.id = token.id as string;
       session.user.firstName = token.firstName as string;
       session.user.lastName = token.lastName as string;

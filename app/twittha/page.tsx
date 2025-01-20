@@ -87,74 +87,146 @@ function page() {
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
             <GridSingleVideo
               src={"https://cdn.masaf.ir/contents/media/coverImage/55.jpg"}
               href="/content/10"
-              desc={
+              content={
                 "سخنرانی استاد رائفی پور در اجتماع مردمی عاشقان مبارزه با اسرائیل"
               }
               date={"1402/08/03"}
+              isAdmin={true}
+              category=""
+              tags={[]}
+              title=""
+              authorId=""
+              key={''}
+              postId=""
+              ref={''}
             />
           </div>
         </div>

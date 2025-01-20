@@ -19,6 +19,9 @@ import theme from './theme';
 export const metadata: Metadata = {
   title: "موسسه مصاف ایرانیان",
   description: "",
+  icons: {
+    icon: '@/public/icon.png'
+  }
 };
 
 export default function RootLayout({
@@ -28,7 +31,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-
+      {/* <head>
+        <link rel="icon" href={'@/public/icon.png'} sizes="any" />
+      </head> */}
       <SessionWrapper>
         <body className="bg-[#F8F8F6] flex flex-col min-h-screen">
           <ToastContainer />

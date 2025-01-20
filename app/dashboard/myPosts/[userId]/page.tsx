@@ -7,7 +7,7 @@ import { postType } from '@/components.types';
 
 
 
-function MoredeAlaghe() {
+function MyPosts() {
 
   const cursorRef = useRef(null);
   const limitRef = useRef(9);
@@ -164,4 +164,4 @@ function MoredeAlaghe() {
   )
 }
 
-export default MoredeAlaghe
+export default MyPosts
